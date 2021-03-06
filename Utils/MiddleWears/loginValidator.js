@@ -22,14 +22,11 @@ module.exports  = function loginValidate(req,res,next){
                                 res.status(500).send("Server error");
                             }
                         })
-                        const token = jwt.sign({session_id:sessionKey }, "jwtSecret");
-                        res.cookie('session_id', token, {
+                        res.cookie('session_id', sessionKey, {
                             maxAge: 60 * 60 * 1000000,
-                            httpOnly: true,
-                            secure: false, //if not https
-                            sameSite: true,
+                            secure: false,
+                            sameSite: 'none',
                         })
-                        //res.cookie('session_id',sessionKey);
                         next();
                     }
                     else{
