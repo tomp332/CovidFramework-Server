@@ -12,7 +12,6 @@ router.route('/register').post((req,res) =>{
     const newWebclient = new WebClient({username:username,password:password,
         date:datetime.toISOString().slice(0,20)});
     WebClient.find({username:username},function (err,user){
-        console.log(user);
         if(user.length !== 0)
             res.status(500).send("User already exists!");
         else

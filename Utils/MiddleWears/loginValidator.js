@@ -27,7 +27,8 @@ module.exports  = function loginValidate(req,res,next){
                             secure: false,
                             sameSite: 'none',
                         })
-                        res.cookie('username', username, {
+
+                        res.cookie('session', username, {
                             maxAge: 60 * 60 * 1000000,
                             secure: false,
                             sameSite: 'none',

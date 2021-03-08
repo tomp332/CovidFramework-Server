@@ -1,11 +1,12 @@
 const router = require('express').Router();
 let WebClient = require('../../Clients/webclients.model');
+let Client = require('../../Clients/client.model');
 let Utils = require('../../Utils/utilFunctions');
 let webCookieValidator = require('../../Utils/MiddleWears/webCookieValidator');
 
 router.use(webCookieValidator);
 
-router.route('/user').get((req,res)=>{
+router.route('/client').get((req,res)=>{
     const sessionKey = req.cookies['session_id'];
     WebClient.findOne({session_key:sessionKey},{}, {useFindAndModify:false}, function(err,user){
         if(err){
@@ -14,6 +15,22 @@ router.route('/user').get((req,res)=>{
         }else{
             if(user) {
                 res.send({username:user['username']});
+            }else{
+                res.send();
+            }
+        }
+    })
+})
+
+router.route('/clients').get((req,res)=>{
+    Client.find({},{}, {}, function(err,users){
+        if(err){
+            Utils.LogToFile(`Error getting user by token ${err}`);
+            res.sendStatus(400);
+        }else{
+            console.log(users);
+            if(users) {
+                res.send(users);
             }else{
                 res.send();
             }
