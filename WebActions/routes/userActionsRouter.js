@@ -28,7 +28,6 @@ router.route('/clients').get((req,res)=>{
             Utils.LogToFile(`Error getting user by token ${err}`);
             res.sendStatus(400);
         }else{
-            console.log(users);
             if(users) {
                 res.send(users);
             }else{

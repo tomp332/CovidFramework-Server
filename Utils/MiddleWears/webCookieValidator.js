@@ -15,7 +15,6 @@ module.exports  = function webCookieValidator(req,res,next){
                     if(user) {
                         next();
                     }
-
                 }
             })
         } else
