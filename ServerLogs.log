@@ -1,0 +1,26 @@
+2021.04.11, 17:31:26.0795 UTC -> Error getting user by token CastError: Cast to string failed for value "{
+  history: {
+    length: 34,
+    action: 'PUSH',
+    location: {
+      pathname: '/control/gw5xpevq',
+      search: '',
+      hash: '',
+      state: null,
+      key: 'lx3tjl'
+    }
+  },
+  location: {
+    pathname: '/control/gw5xpevq',
+    search: '',
+    hash: '',
+    state: null,
+    key: 'lx3tjl'
+  },
+  match: {
+    path: '/control/:id',
+    url: '/control/gw5xpevq',
+    isExact: true,
+    params: { id: 'gw5xpevq' }
+  }
+}" at path "client_id" for model "Client"

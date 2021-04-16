@@ -9,7 +9,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: 'http://10.0.0.7:3000'}));
+app.use(cors({ credentials: true, origin: 'http://10.0.0.4:3000'}));
 
 
 //Routes

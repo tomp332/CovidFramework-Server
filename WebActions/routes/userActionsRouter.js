@@ -8,6 +8,7 @@ router.use(webCookieValidator);
 
 router.route('/client').post((req,res)=>{
     const clientId = req.body.id;
+    console.log(clientId);
     Client.findOne({client_id:clientId},{}, {useFindAndModify:false}, function(err,user){
         if(err){
             Utils.LogToFile(`Error getting user by token ${err}`);

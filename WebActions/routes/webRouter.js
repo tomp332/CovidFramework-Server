@@ -25,9 +25,6 @@ router.route('/register').post((req,res) =>{
     })
 });
 
-
-
-
 //Register middle wear for login
 router.use(validateLogin);
 

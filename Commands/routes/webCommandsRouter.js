@@ -14,7 +14,7 @@ router.route('/add').post((req,res) =>{
     const command_id = GenerateRandomId(6);
     const client_id = req.body.clientId;
     const command = req.body.command;
-    const newCommand = new Command({command_id, client_id, command});
+    const newCommand = new Command({command_id:command_id, client_id:client_id, command:command});
     newCommand.save()
         .then(() => res.send('Command added successfully!'))
         .catch(err => res.status(400).send(`Error adding command ${err}`));
