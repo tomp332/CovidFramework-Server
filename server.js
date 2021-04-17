@@ -15,7 +15,8 @@ app.use(cors({ credentials: true, origin: 'http://10.0.0.4:3000'}));
 //Routes
 const ToolRouter = require('./Clients/routes/clientsRouter');
 const CommandRouter = require('./Commands/routes/toolCommandsRouter');
-const ResponsesRouter = require('./Responses/routes/responsesRouter');
+const ToolResponsesRouter = require('./Responses/routes/toolResponsesRouter');
+const ApiResponsesRouter = require('./Responses/routes/apiResponseRouter');
 const WebActionsRouter = require('./WebActions/routes/webRouter');
 const WebCommandsRouter = require('./Commands/routes/webCommandsRouter');
 const WebClientActionsRouter = require('./Clients/routes/webClientsRouter');
@@ -28,7 +29,8 @@ app.use('/tool/commands',CommandRouter)
 app.use('/api', WebUserActions);
 app.use('/api/commands',WebCommandsRouter);
 app.use('/api/clients', WebClientActionsRouter);
-app.use('/tool/response',ResponsesRouter);
+app.use('/tool/response',ToolResponsesRouter);
+app.use('/api/response',ApiResponsesRouter);
 app.use('/', WebActionsRouter);
 
 

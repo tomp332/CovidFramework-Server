@@ -24,7 +24,7 @@ router.route('/add').post((req,res) =>{
 //Add powershell command
 router.route('/ps/add').post((req,res) =>{
     const commandId = GenerateRandomId(6);
-    const clientId = req.sidebars['clientid'];
+    const clientId = req.headers['clientid'];
     const command = req.body.command;
     const newPsCommand = new psCommand({command_id:commandId, client_id:clientId, command:command});
 

