@@ -1,16 +1,16 @@
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}`});
 const express = require('express');
 const cors = require('cors');
 const database = require('./Database/connect');
 const cookieParser = require('cookie-parser');
-require('dotenv').config();
 
 //Express config
 const app = express();
 const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: 'http://10.0.0.4:3000'}));
-
+app.use(cors({ credentials: true, origin: `${process.env.ORIGIN_HOST}:${process.env.ORIGIN_HOST}`}));
+console.log(process.env.ORIGIN_HOST)
 
 //Routes
 const ToolRouter = require('./Clients/routes/clientsRouter');
@@ -36,6 +36,7 @@ app.use('/', WebActionsRouter);
 
 // Connect to DB
 const uri = process.env.ATLAS_URI;
+console.log("uri", uri)
 const Database = new database(uri);
 const connection = Database.connectToDB();
 
