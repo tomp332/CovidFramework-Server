@@ -16,7 +16,7 @@ router.route('/client').post((req,res)=>{
             if(user) {
                 res.send({user});
             }else{
-                res.send();
+                res.send({});
             }
         }
     })
