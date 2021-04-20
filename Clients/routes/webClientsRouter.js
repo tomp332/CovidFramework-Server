@@ -47,7 +47,7 @@ router.route('/killall').get((req,res )=>{
 //kill single client
 router.route('/kill').post((req,res )=>{
     try{
-        const clientId = req.body.clientId;
+        const clientId = req.body.client_id;
         //Gather all clients from database
         Client.findOneAndDelete({client_id:clientId},function(err,user) {
             if (err) {
