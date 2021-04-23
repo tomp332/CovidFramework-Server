@@ -25,11 +25,35 @@ router.route('/register').post((req,res) =>{
     })
 });
 
+
+router.route('/auth').get((req,res) =>{
+    try{
+        let sessionKey = req.cookies.session_id;
+        WebClient.findOne({session_key:sessionKey},function(err,user) {
+            if(err)
+                res.sendStatus(403);
+            else{
+                if(user !== null)
+                    res.send();
+                else
+                    res.sendStatus(403);
+            }
+        });
+    }
+    catch (err){
+        console.log(err);
+        res.sendStatus(403);
+
+    }
+});
+
 //Register middle wear for login
 router.use(validateLogin);
 
 router.route('/login').post((req,res) =>{
    res.send({response:"Access granted!"});
 });
+
+
 
 module.exports = router;

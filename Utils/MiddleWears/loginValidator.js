@@ -10,7 +10,7 @@ module.exports  = function loginValidate(req,res,next){
             WebClient.findOne({username:username, password:password},function(err,user){
                 if(err){
                     console.log(`Error authenticating webclient from database ${err}`);
-                    res.status(401).send("Unauthorized!");
+                    res.status(403).send("Unauthorized!");
                 }
                 else{
                     if(user !== null){
@@ -36,7 +36,7 @@ module.exports  = function loginValidate(req,res,next){
                         next();
                     }
                     else{
-                        res.status(401).send("Not granted!");
+                        res.status(403).send("Not granted!");
                     }
                 }
             })
@@ -44,7 +44,7 @@ module.exports  = function loginValidate(req,res,next){
     }
     catch (err){
         console.log(`Error parsing login request for authentication purpose ${err}`);
-        res.status(401).send("Unauthorized!");
+        res.status(403).send("Unauthorized!");
     }
 
 }
