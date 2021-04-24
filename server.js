@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const database = require('./Database/connect');
 const cookieParser = require('cookie-parser');
-require('dotenv').config({ path: `.env.${process.env.NODE_ENV}`});
+require('dotenv').config()
 
 //Express config
 const app = express();
@@ -37,9 +37,6 @@ app.use('/', WebActionsRouter);
 const uri = process.env.ATLAS_URI;
 const Database = new database(uri);
 const connection = Database.connectToDB();
-
-
-
 
 
 //Start server
