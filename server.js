@@ -9,7 +9,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: `${process.env.ORIGIN_HOST}:${process.env.ORIGIN_HOST}`}));
+app.use(cors({ credentials: true, origin: `http://${process.env.host}:${process.env.client_port}`}));
 
 //Routes
 const ToolRouter = require('./Clients/routes/clientsRouter');
