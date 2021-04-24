@@ -2,15 +2,14 @@ const express = require('express');
 const cors = require('cors');
 const database = require('./Database/connect');
 const cookieParser = require('cookie-parser');
-require('dotenv').config();
+require('dotenv').config({ path: `.env.${process.env.NODE_ENV}`});
 
 //Express config
 const app = express();
 const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: `http://${process.env.HOST}:3000`}));
-
+app.use(cors({ credentials: true, origin: `${process.env.ORIGIN_HOST}:${process.env.ORIGIN_HOST}`}));
 
 //Routes
 const ToolRouter = require('./Clients/routes/clientsRouter');
