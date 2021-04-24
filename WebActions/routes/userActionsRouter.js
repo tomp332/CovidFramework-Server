@@ -6,37 +6,6 @@ let webCookieValidator = require('../../Utils/MiddleWears/webCookieValidator');
 
 router.use(webCookieValidator);
 
-router.route('/client').post((req,res)=>{
-    const clientId = req.body.id;
-    Client.findOne({client_id:clientId},{}, {useFindAndModify:false}, function(err,user){
-        if(err){
-            Utils.LogToFile(`Error getting user by token ${err}`);
-            res.sendStatus(400);
-        }else{
-            if(user) {
-                res.send({user});
-            }else{
-                res.send({});
-            }
-        }
-    })
-})
-
-router.route('/clients').get((req,res)=>{
-    Client.find({},{}, {}, function(err,users){
-        if(err){
-            Utils.LogToFile(`Error getting user by token ${err}`);
-            res.sendStatus(400);
-        }else{
-            if(users) {
-                res.send(users);
-            }else{
-                res.send();
-            }
-        }
-    })
-})
-
 //Signout
 router.route('/logout').get((req,res) =>{
     const sessionKey = req.cookies['session_id'];
