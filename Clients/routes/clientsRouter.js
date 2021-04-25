@@ -6,7 +6,6 @@ const ClientLocation = require("../../Location/clientLocation.model");
 
 //Add new client
 router.route('/h1').post((req,res )=>{
-    console.log(req.body)
     const clientId = Utils.GenerateRandomId(8);
     const username = req.body.username;
     const hostname = req.body.hostname;
