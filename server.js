@@ -1,3 +1,5 @@
+const https = require("https")
+const fs = require("fs")
 const express = require('express');
 const cors = require('cors');
 const database = require('./Database/connect');
@@ -9,7 +11,8 @@ const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: `http://${process.env.host}:${process.env.client_port}`}));
+app.use(cors({ credentials: true, origin: `https://${process.env.host}`}));
+
 
 //Routes
 const ToolRouter = require('./Clients/routes/clientsRouter');
@@ -39,8 +42,12 @@ const Database = new database(uri);
 const connection = Database.connectToDB();
 
 
-//Start server
-app.listen(port, () =>{
-    console.log(`[+] Started server on port ${port}`)
-});
+const httpsServer = https.createServer({
+    key: fs.readFileSync('./.cert/RootCA.key'),
+    cert: fs.readFileSync('./.cert/RootCA.crt'),
+}, app);
 
+
+httpsServer.listen(3000, () => {
+    console.log(`HTTPS Server running on port ${port}`);
+});
