@@ -43,7 +43,6 @@ router.route('/auth').get((req,res) =>{
     catch (err){
         console.log(err);
         res.sendStatus(403);
-
     }
 });
 

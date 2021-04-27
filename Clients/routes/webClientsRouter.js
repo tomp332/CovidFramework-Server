@@ -5,6 +5,18 @@ const Utils = require('../../Utils/utilFunctions');
 const Command = require("../../Commands/commands.model");
 const Status = require("../../Status/status.model");
 const clientLocations = require("../../Location/clientLocation.model")
+const formidable = require('formidable');
+const fs = require("fs");
+const multer = require('multer')
+let storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'public')
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' +file.originalname )
+    }
+})
+let upload = multer({ storage: storage }).single('file')
 
 router.use(webCookieValidator);
 
@@ -117,5 +129,23 @@ router.route('/locations').get((req,res)=> {
             }
         }
     })
+})
+
+//Upload file to directory
+router.route('/upload').post((req,res)=> {
+    try{
+        upload(req, res, function (err) {
+            if (err instanceof multer.MulterError) {
+                return res.sendStatus(500)
+            } else if (err) {
+                return res.sendStatus(500)
+            }
+            return res.send()
+        })
+    }
+    catch (err){
+        console.log(err)
+        res.sendStatus(400)
+    }
 })
 module.exports = router;

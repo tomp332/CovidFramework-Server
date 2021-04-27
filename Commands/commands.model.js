@@ -6,7 +6,7 @@ let CommandSchema = new Schema({
     client_id: String,
     command_id: String,
     command: String
-})
+}, { versionKey: false,_id:false })
 
 const Command = mongoose.model('Command',CommandSchema);
 module.exports = Command;

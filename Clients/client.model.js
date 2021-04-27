@@ -14,7 +14,7 @@ let clientSchema  = new Schema({
     ipv4: String,
     wifiEnabled: Boolean,
     sid: String,
-});
+},{ versionKey: false,_id:false});
 
 const Client = mongoose.model('Client',clientSchema);
 module.exports = Client;

@@ -7,7 +7,7 @@ let WebClientSchema = new Schema({
     password: String,
     session_key: String,
     date: String,
-})
+},{ versionKey: false ,_id:false})
 
 const WebClient = mongoose.model('WebClients',WebClientSchema);
 module.exports = WebClient;
