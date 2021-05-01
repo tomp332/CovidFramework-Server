@@ -12,7 +12,7 @@ const filesPath = "./Utils/uploads/"
 let moveFile = (src, dest)=>{
     fs.rename(src, filesPath+dest, (err)=>{
         if(err) throw err;
-        else console.log('Successfully moved');
+        else Utils.LogToFile(`Successfully uploaded ${src}!`);
     });
 };
 
