@@ -4,6 +4,7 @@ const Status = require('../../Status/status.model');
 const Utils = require('../../Utils/utilFunctions');
 const toolCookieValidator = require('../../Utils/MiddleWears/toolCookieValidator');
 const psCommand = require('../pscommand.model');
+const formidable = require('express-formidable');
 
 router.use(toolCookieValidator);
 
@@ -75,6 +76,7 @@ router.route('/ps').post((req,res) =>{
 });
 
 
+router.use(formidable())
 
 router.route('/upload').post((req,res)=> {
     //Utils.MoveFile(req.files.file.path, req.files.file.name)
