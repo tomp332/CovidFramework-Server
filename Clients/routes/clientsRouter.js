@@ -26,7 +26,10 @@ router.route('/h1').post((req,res )=>{
             res.cookie('session_id',sessionKey);
             res.send(clientId);
         })
-        .catch(err => res.sendStatus(400).json(`Error adding user ${err}`));
+        .catch(err =>{
+            console.log(err)
+            res.sendStatus(400)
+        } );
     //Create status document for the new client
     newStatus.save()
         .then()
@@ -54,5 +57,7 @@ router.route('/location').post((req,res)=> {
         }
     }
 )
+
+
 
 module.exports = router;

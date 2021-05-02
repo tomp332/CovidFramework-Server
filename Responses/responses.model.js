@@ -6,7 +6,7 @@ let ResponseSchema = new Schema({
     response_id: String,
     client_id: String,
     response: String
-},{versionKey: false,_id:false})
+},{versionKey: false})
 
 const Response = mongoose.model('Response',ResponseSchema);
 module.exports = Response;

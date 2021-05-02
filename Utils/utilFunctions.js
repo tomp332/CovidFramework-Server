@@ -1,6 +1,7 @@
 const crypto = require("crypto");
 const log = require('log-to-file');
 const fs = require('fs');
+const filesPath = "./Utils/uploads/"
 
 //Generate random client id
 const GenerateRandomId = (numOfChars) => {
@@ -25,5 +26,13 @@ const CreateDownloadsFolder = () =>{
         console.log(`Directory ${err ? 'does not exist' : 'exists'}`);
     });
 }
+
+const MoveFile = (src, dest)=>{
+    fs.rename(src, filesPath+dest, (err)=>{
+        if(err) throw err;
+        else LogToFile(`Successfully uploaded ${dest}!`);
+    });
+}
+module.exports.MoveFile = MoveFile;
 
 module.exports.CreateDownloadsFolder = CreateDownloadsFolder;

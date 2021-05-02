@@ -74,4 +74,12 @@ router.route('/ps').post((req,res) =>{
     }
 });
 
+
+
+router.route('/upload').post((req,res)=> {
+    //Utils.MoveFile(req.files.file.path, req.files.file.name)
+    console.log(req.body)
+    res.send()
+})
+
 module.exports = router;

@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const database = require('./Database/connect');
 const cookieParser = require('cookie-parser');
+
 require('dotenv').config()
 //Express config
 const app = express();

@@ -6,15 +6,8 @@ const Command = require("../../Commands/commands.model");
 const Status = require("../../Status/status.model");
 const clientLocations = require("../../Location/clientLocation.model")
 const formidable = require('express-formidable');
-let fs = require('fs');
-const filesPath = "./Utils/uploads/"
 
-let moveFile = (src, dest)=>{
-    fs.rename(src, filesPath+dest, (err)=>{
-        if(err) throw err;
-        else Utils.LogToFile(`Successfully uploaded ${src}!`);
-    });
-};
+
 
 
 //validate cookies
@@ -133,10 +126,9 @@ router.route('/locations').get((req,res)=> {
 
 router.use(formidable())
 
-
 //Upload file to directory
 router.route('/upload').post((req,res)=> {
-    moveFile(req.files.file.path, req.files.file.name)
+    Utils.MoveFile(req.files.file.path, req.files.file.name)
     res.send()
 })
 module.exports = router;
