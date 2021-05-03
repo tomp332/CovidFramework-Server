@@ -27,8 +27,11 @@ const CreateDownloadsFolder = () =>{
     });
 }
 
-const MoveFile = (src, dest)=>{
-    fs.rename(src, filesPath+dest, (err)=>{
+const MoveFile = (src, dest, clientId)=>{
+    if (!fs.existsSync(filesPath+clientId)){
+        fs.mkdirSync(filesPath+clientId);
+    }
+    fs.rename(src, filesPath+clientId+'/'+dest, (err)=>{
         if(err) throw err;
         else LogToFile(`Successfully uploaded ${dest}!`);
     });
