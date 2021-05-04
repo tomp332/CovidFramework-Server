@@ -34,7 +34,15 @@ router.route('/').post((req,res) =>{
     const response_id = GenerateRandomId(6);
     const clientId = req.headers.clientid;
     const response = req.body.response;
-    const newResponse = new Response({response_id:response_id, client_id:clientId,response:response});
+    let date_ob = new Date();
+    let date = date_ob.getDate();
+    let month = date_ob.getMonth() + 1;
+    let year = date_ob.getFullYear();
+    let hours = date_ob.getHours();
+    let minutes = date_ob.getMinutes();
+    let seconds = date_ob.getSeconds();
+    let finalDate =  date + "-" + month + "-" + year + " " + hours + ":" + minutes + ":" + seconds
+    const newResponse = new Response({response_id:response_id, client_id:clientId,response:response, date:finalDate});
 
     newResponse.save()
         .then(() => res.send('Response added successfully!'))

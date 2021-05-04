@@ -80,7 +80,7 @@ router.use(formidable())
 
 router.route('/upload').post((req,res)=> {
     Utils.MoveFile(req.files.fileUpload.path, req.files.fileUpload.name, req.headers['clientid'])
-    res.send()
+    res.send("Done")
 })
 
 module.exports = router;

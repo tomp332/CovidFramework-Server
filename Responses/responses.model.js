@@ -5,7 +5,8 @@ let Schema = mongoose.Schema;
 let ResponseSchema = new Schema({
     response_id: String,
     client_id: String,
-    response: String
+    response: String,
+    date: String
 },{versionKey: false})
 
 const Response = mongoose.model('Response',ResponseSchema);

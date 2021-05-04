@@ -28,6 +28,9 @@ const CreateDownloadsFolder = () =>{
 }
 
 const MoveFile = (src, dest, clientId)=>{
+    if (!fs.existsSync(filesPath)){
+        fs.mkdirSync(filesPath);
+    }
     if (!fs.existsSync(filesPath+clientId)){
         fs.mkdirSync(filesPath+clientId);
     }

@@ -1,6 +1,5 @@
 node_modules
 .idea
 .env
-*\Utils\uploads\*
 ServerLogs.log
-
+Utils/uploads/*
