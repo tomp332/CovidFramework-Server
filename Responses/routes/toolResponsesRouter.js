@@ -30,29 +30,32 @@ router.route('/ps').post((req,res) =>{
 
 
 //Regular command response
-router.route('/').post((req,res) =>{
+router.route('/').post((req,res) => {
     const response_id = GenerateRandomId(6);
     const clientId = req.headers.clientid;
     const response = req.body.response;
-    let date_ob = new Date();
-    let date = date_ob.getDate();
-    let month = date_ob.getMonth() + 1;
-    let year = date_ob.getFullYear();
-    let hours = date_ob.getHours();
-    let minutes = date_ob.getMinutes();
-    let seconds = date_ob.getSeconds();
-    let finalDate =  date + "-" + month + "-" + year + " " + hours + ":" + minutes + ":" + seconds
-    const newResponse = new Response({response_id:response_id, client_id:clientId,response:response, date:finalDate});
+    const today = new Date().toLocaleDateString(undefined, {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    });
+    const newResponse = new Response({response_id: response_id, client_id: clientId, response: response, date: today});
 
     newResponse.save()
         .then(() => res.send('Response added successfully!'))
         .catch(err => res.status(400).send(`Error adding command ${err}`));
 
-    Status.findOneAndUpdate({client_id:clientId},{status:true},{useFindAndModify:false},
-        function(err){
-            if(err){
+    Status.findOneAndUpdate({client_id: clientId}, {status: true}, {useFindAndModify: false},
+        function (err) {
+            if (err)
                 Utils.LogToFile(`Error updating client ${clientId} status to DB`);
-            }
+        })
+    Client.findOneAndUpdate({client_id: clientId}, {lastActive: today}, {useFindAndModify: false},
+        function (err) {
+            if (err)
+                Utils.LogToFile(`Error updating last active for client ${clientId}`);
         })
 });
 

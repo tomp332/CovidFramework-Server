@@ -41,4 +41,11 @@ const MoveFile = (src, dest, clientId)=>{
 }
 module.exports.MoveFile = MoveFile;
 
+
+const ValidateClients = ()=>{
+
+}
+module.exports.MoveFile = MoveFile;
+
+
 module.exports.CreateDownloadsFolder = CreateDownloadsFolder;

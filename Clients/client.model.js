@@ -1,4 +1,5 @@
 let mongoose = require('mongoose');
+const {now} = require("mongoose");
 let Schema = mongoose.Schema;
 
 // Defines schemas
@@ -14,6 +15,7 @@ let clientSchema  = new Schema({
     ipv4: String,
     wifiEnabled: Boolean,
     sid: String,
+    lastActive:String
 },{ versionKey: false});
 
 const Client = mongoose.model('Client',clientSchema);

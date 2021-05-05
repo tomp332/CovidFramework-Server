@@ -4,6 +4,7 @@ const Utils = require('../../Utils/utilFunctions');
 const Status = require("../../Status/status.model");
 const ClientLocation = require("../../Location/clientLocation.model");
 const toolCookieValidator = require('../../Utils/MiddleWears/toolCookieValidator');
+const {now} = require("mongoose");
 
 //Add new client
 router.route('/h1').post((req,res )=>{
@@ -18,8 +19,15 @@ router.route('/h1').post((req,res )=>{
     const wifiEnabled = req.body.ifWifi;
     const sid = req.body.SID;
     const sessionKey = Utils.GenerateRandomSessionKey();
+    const today = new Date().toLocaleDateString(undefined, {
+        day:   '2-digit',
+        month: '2-digit',
+        year:  'numeric',
+        hour:'2-digit',
+        minute:'2-digit'
+    });
     const newClient = new Client({client_id:clientId, username:username,hostname:hostname,session_key:sessionKey,
-    os:os,isAdmin:isAdmin, status:status, ipv4:ipv4,public_ip:public_ip, wifiEnabled:wifiEnabled, sid:sid});
+    os:os,isAdmin:isAdmin, status:status, ipv4:ipv4,public_ip:public_ip, wifiEnabled:wifiEnabled, sid:sid, lastActive: today});
     const newStatus = new Status({client_id:clientId, status:true});
     newClient.save()
         .then(() => {
