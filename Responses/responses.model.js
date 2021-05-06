@@ -7,7 +7,7 @@ let ResponseSchema = new Schema({
     client_id: String,
     response: String,
     date: String
-},{versionKey: false})
+}, {versionKey: false})
 
-const Response = mongoose.model('Response',ResponseSchema);
+const Response = mongoose.model('Response', ResponseSchema);
 module.exports = Response;

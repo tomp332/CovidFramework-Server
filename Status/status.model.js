@@ -4,7 +4,7 @@ let Schema = mongoose.Schema;
 let StatusSchema = new Schema({
     client_id: String,
     status: Boolean
-},{ versionKey: false})
+}, {versionKey: false})
 
-const Status = mongoose.model('Status',StatusSchema);
+const Status = mongoose.model('Status', StatusSchema);
 module.exports = Status;

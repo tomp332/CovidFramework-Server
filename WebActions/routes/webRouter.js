@@ -5,17 +5,18 @@ let webCookieValidator = require('../../Utils/MiddleWears/webCookieValidator');
 let validateLogin = require('../../Utils/MiddleWears/loginValidator');
 
 
-router.route('/register').post((req,res) =>{
+router.route('/register').post((req, res) => {
     const username = req.body.username;
     const password = req.body.password;
     const datetime = new Date();
-    const newWebclient = new WebClient({username:username,password:password,
-        date:datetime.toISOString().slice(0,20)});
-    WebClient.find({username:username},function (err,user){
-        if(user.length !== 0)
+    const newWebclient = new WebClient({
+        username: username, password: password,
+        date: datetime.toISOString().slice(0, 20)
+    });
+    WebClient.find({username: username}, function (err, user) {
+        if (user.length !== 0)
             res.status(500).send("User already exists!");
-        else
-        {
+        else {
             newWebclient.save()
                 .then(() => {
                     res.send('Web user added!');
@@ -26,21 +27,20 @@ router.route('/register').post((req,res) =>{
 });
 
 
-router.route('/auth').get((req,res) =>{
-    try{
+router.route('/auth').get((req, res) => {
+    try {
         let sessionKey = req.cookies.session_id;
-        WebClient.findOne({session_key:sessionKey},function(err,user) {
-            if(err)
+        WebClient.findOne({session_key: sessionKey}, function (err, user) {
+            if (err)
                 res.sendStatus(403);
-            else{
-                if(user !== null)
+            else {
+                if (user !== null)
                     res.send();
                 else
                     res.sendStatus(403);
             }
         });
-    }
-    catch (err){
+    } catch (err) {
         console.log(err);
         res.sendStatus(403);
     }
@@ -49,10 +49,9 @@ router.route('/auth').get((req,res) =>{
 //Register middle wear for login
 router.use(validateLogin);
 
-router.route('/login').post((req,res) =>{
-   res.send({response:"Access granted!"});
+router.route('/login').post((req, res) => {
+    res.send({response: "Access granted!"});
 });
-
 
 
 module.exports = router;

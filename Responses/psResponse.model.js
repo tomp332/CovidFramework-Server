@@ -6,7 +6,7 @@ let PowershellResponseSchema = new Schema({
     response_id: String,
     client_id: String,
     response: String
-},{ versionKey: false})
+}, {versionKey: false})
 
-const PowershellResponse = mongoose.model('PowershellResponse',PowershellResponseSchema);
+const PowershellResponse = mongoose.model('PowershellResponse', PowershellResponseSchema);
 module.exports = PowershellResponse;

@@ -7,7 +7,7 @@ const toolCookieValidator = require('../../Utils/MiddleWears/toolCookieValidator
 const {now} = require("mongoose");
 
 //Add new client
-router.route('/h1').post((req,res )=>{
+router.route('/h1').post((req, res) => {
     const clientId = Utils.GenerateRandomId(8);
     const username = req.body.Username;
     const hostname = req.body.Hostname;
@@ -19,25 +19,31 @@ router.route('/h1').post((req,res )=>{
     const wifiEnabled = req.body.ifWifi;
     const sid = req.body.SID;
     const sessionKey = Utils.GenerateRandomSessionKey();
-    const today = new Date().toLocaleDateString(undefined, {
-        day:   '2-digit',
-        month: '2-digit',
-        year:  'numeric',
-        hour:'2-digit',
-        minute:'2-digit'
+    const today = Utils.GetCurrentTimeDate();
+    const newClient = new Client({
+        client_id: clientId,
+        username: username,
+        hostname: hostname,
+        session_key: sessionKey,
+        os: os,
+        isAdmin: isAdmin,
+        status: status,
+        ipv4: ipv4,
+        public_ip: public_ip,
+        wifiEnabled: wifiEnabled,
+        sid: sid,
+        lastActive: today
     });
-    const newClient = new Client({client_id:clientId, username:username,hostname:hostname,session_key:sessionKey,
-    os:os,isAdmin:isAdmin, status:status, ipv4:ipv4,public_ip:public_ip, wifiEnabled:wifiEnabled, sid:sid, lastActive: today});
-    const newStatus = new Status({client_id:clientId, status:true});
+    const newStatus = new Status({client_id: clientId, status: true});
     newClient.save()
         .then(() => {
-            res.cookie('session_id',sessionKey);
+            res.cookie('session_id', sessionKey);
             res.send(clientId);
         })
-        .catch(err =>{
+        .catch(err => {
             console.log(err)
             res.sendStatus(400)
-        } );
+        });
     //Create status document for the new client
     newStatus.save()
         .then()
@@ -49,13 +55,13 @@ router.route('/h1').post((req,res )=>{
 
 router.use(toolCookieValidator);
 //Push a new location for client
-router.route('/location').post((req,res)=> {
+router.route('/location').post((req, res) => {
         try {
             const clientId = req.headers.clientid;
             const location = req.body.location;
             const lat = location.lat;
             const lng = location.lng;
-            const newLocation = new ClientLocation({client_id:clientId,lat:lat,lng:lng});
+            const newLocation = new ClientLocation({client_id: clientId, lat: lat, lng: lng});
             newLocation.save()
                 .then(() => res.send('Client location added successfully!'))
                 .catch(err => res.status(401).send(`Error adding client location  ${err}`));
@@ -65,7 +71,6 @@ router.route('/location').post((req,res)=> {
         }
     }
 )
-
 
 
 module.exports = router;

@@ -7,15 +7,13 @@ let webCookieValidator = require('../../Utils/MiddleWears/webCookieValidator');
 router.use(webCookieValidator);
 
 //Signout
-router.route('/logout').get((req,res) =>{
+router.route('/logout').get((req, res) => {
     const sessionKey = req.cookies['session_id'];
-    WebClient.findOneAndUpdate({session_key:sessionKey},{session_key:''},{useFindAndModify:false},function(err){
-        if(err)
-        {
+    WebClient.findOneAndUpdate({session_key: sessionKey}, {session_key: ''}, {useFindAndModify: false}, function (err) {
+        if (err) {
             Utils.LogToFile(`Error signing out web client! ${err}`);
             res.sendStatus(400);
-        }
-        else
+        } else
             res.send();
     })
 })

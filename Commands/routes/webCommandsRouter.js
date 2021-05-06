@@ -10,11 +10,11 @@ router.use(webCookieValidator);
 
 
 //Add regular command
-router.route('/add').post((req,res) =>{
+router.route('/add').post((req, res) => {
     const command_id = GenerateRandomId(6);
     const clientId = req.body.client_id;
     const command = req.body.command;
-    const newCommand = new Command({client_id:clientId, command_id:command_id, command:command});
+    const newCommand = new Command({client_id: clientId, command_id: command_id, command: command});
     newCommand.save()
         .then(() => res.send('Command added successfully!'))
         .catch(err => res.status(400).send(`Error adding command ${err}`));
@@ -22,11 +22,11 @@ router.route('/add').post((req,res) =>{
 
 
 //Add powershell command
-router.route('/ps/add').post((req,res) =>{
+router.route('/ps/add').post((req, res) => {
     const commandId = GenerateRandomId(6);
     const clientId = req.headers['clientid'];
     const command = req.body.command;
-    const newPsCommand = new psCommand({command_id:commandId, client_id:clientId, command:command});
+    const newPsCommand = new psCommand({command_id: commandId, client_id: clientId, command: command});
 
     newPsCommand.save()
         .then(() => res.send())

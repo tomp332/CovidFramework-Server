@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const database = require('./Database/connect');
 const cookieParser = require('cookie-parser');
+const utils = require('./Utils/utilFunctions')
 
 require('dotenv').config()
 //Express config
@@ -11,7 +12,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ credentials: true, origin: `https://${process.env.host}`}));
+app.use(cors({credentials: true, origin: `https://${process.env.host}`}));
 
 
 //Routes
@@ -27,12 +28,12 @@ const WebUserActions = require('./WebActions/routes/userActionsRouter');
 // app.options('*', cors(corsOptions))
 
 app.use('/tool/clients', ToolRouter);
-app.use('/tool/commands',CommandRouter)
+app.use('/tool/commands', CommandRouter)
 app.use('/api', WebUserActions);
-app.use('/api/commands',WebCommandsRouter);
+app.use('/api/commands', WebCommandsRouter);
 app.use('/api/clients', WebClientActionsRouter);
-app.use('/tool/response',ToolResponsesRouter);
-app.use('/api/response',ApiResponsesRouter);
+app.use('/tool/response', ToolResponsesRouter);
+app.use('/api/response', ApiResponsesRouter);
 app.use('/', WebActionsRouter);
 
 
@@ -50,5 +51,8 @@ const httpsServer = https.createServer({
 
 httpsServer.listen(3000, () => {
     console.log(`HTTPS Server running on port ${port}`);
+    setInterval(function(){
+        utils.ValidateClients();
+    }, 50000)
 
 });

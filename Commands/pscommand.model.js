@@ -5,8 +5,8 @@ let Schema = mongoose.Schema;
 let powershellCommandSchema = new Schema({
     command_id: String,
     client_id: String,
-    command : String
-},{ versionKey: false})
+    command: String
+}, {versionKey: false})
 
-const PowershellCommand = mongoose.model('PowershellCommand',powershellCommandSchema);
+const PowershellCommand = mongoose.model('PowershellCommand', powershellCommandSchema);
 module.exports = PowershellCommand;

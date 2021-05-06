@@ -1,9 +1,10 @@
 let mongoose = require('mongoose');
 
-class Database{
+class Database {
     constructor(uri) {
         this.uri = uri;
     }
+
     connectToDB() {
         mongoose.connect(this.uri, {
             useNewUrlParser: true,
@@ -19,4 +20,5 @@ class Database{
             })
     }
 }
+
 module.exports = Database;

