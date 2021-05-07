@@ -81,10 +81,9 @@ const ValidateClients = (currentTimeDate) => {
                     let clientMinutes = clientTime.split(':')[1].split(' ')[0]
                     if (parseInt(clientHours) === parseInt(parsed[1])) {
                         //Check if the client hasn't been active for 1 minutes
-                        if (Math.abs(parseInt(clientMinutes) - parseInt(parsed[2])) >= 1) {
+                        if (Math.abs(parseInt(clientMinutes) - parseInt(parsed[2])) > 1) {
                             DisconnectClient(client.client_id);
                         }
-
                     }
                 } else {
                     DisconnectClient(client.client_id);

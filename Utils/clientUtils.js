@@ -45,3 +45,42 @@ const RemoveClient = (clientId) => {
 }
 module.exports.RemoveClient = RemoveClient;
 
+const NumLowPrivClients = async () => {
+    return Client.countDocuments({isAdmin: false}, function (err) {
+        if (err)
+            Utils.LogToFile(`Error getting statistics for low priv. clients, ${err}`)
+    });
+}
+module.exports.NumLowPrivClients = NumLowPrivClients;
+
+const NumHighPrivClients = async () => {
+    return Client.countDocuments({isAdmin: true}, function (err) {
+        if (err)
+            Utils.LogToFile(`Error getting statistics for low priv. clients, ${err}`)
+    });
+}
+module.exports.NumHighPrivClients = NumHighPrivClients;
+
+const GetNumClients = async () => {
+    return Client.countDocuments({}, function (err) {
+        if (err)
+            Utils.LogToFile(`Error getting statistics for amount of clients, ${err}`)
+    });
+}
+module.exports.GetNumClients = GetNumClients;
+
+const NumConnectedClients = async () => {
+    return Client.countDocuments({status:true}, function (err) {
+        if (err)
+            Utils.LogToFile(`Error getting statistics for amount of online clients, ${err}`)
+    });
+}
+module.exports.NumConnectedClients = NumConnectedClients;
+
+const NumDisconnectedClients = async () => {
+    return Client.countDocuments({status:false}, function (err) {
+        if (err)
+            Utils.LogToFile(`Error getting statistics for amount of offline clients, ${err}`)
+    });
+}
+module.exports.NumDisconnectedClients = NumDisconnectedClients;
