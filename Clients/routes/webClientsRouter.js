@@ -4,8 +4,7 @@ const webCookieValidator = require('../../Utils/MiddleWears/webCookieValidator')
 const Utils = require('../../Utils/utilFunctions');
 const Command = require("../../Commands/commands.model");
 const clientLocations = require("../../Location/clientLocation.model")
-const formidable = require('express-formidable');
-
+const ClientUtils = require('../../Utils/clientUtils')
 
 //validate cookies
 router.use(webCookieValidator);
@@ -49,13 +48,16 @@ router.route('/killall').get((req, res) => {
 //kill single client
 router.route('/kill').post((req, res) => {
     try {
-        const clientId = req.body.client_id;
-        const command_id = Utils.GenerateRandomId(6);
-        const newCommand = new Command({client_id: clientId, command_id: command_id, command: "exit"});
-        newCommand.save().then(() => res.send()).catch(err => {
-            Utils.LogToFile(`Error sending final kill command for client ${clientId}: ${err}`)
-            res.sendStatus(500)
-        });
+        let clientId = req.body.client_id;
+        ClientUtils.CheckClientStatus(clientId).then((status) => {
+            if (!status)
+                ClientUtils.RemoveClient(clientId)
+            else{
+                ClientUtils.AddCommand(clientId, "exit").then(() => res.send()).catch(() => res.sendStatus(500))
+
+            }
+
+        }).catch((err) => Utils.LogToFile(`Error checking client status for kill command ${err}`))
     } catch (err) {
         Utils.LogToFile(`Error killing client ${err}`);
         res.sendStatus(500)
@@ -112,11 +114,5 @@ router.route('/locations').get((req, res) => {
     })
 })
 
-router.use(formidable())
 
-//Upload file to directory
-router.route('/upload').post((req, res) => {
-    Utils.MoveFile(req.files.file.path, req.files.file.name, req.headers['client_id'])
-    res.send()
-})
 module.exports = router;

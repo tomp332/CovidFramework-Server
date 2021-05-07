@@ -2,20 +2,17 @@ const router = require('express').Router();
 let Command = require('../commands.model');
 let webCookieValidator = require('../../Utils/MiddleWears/webCookieValidator');
 const psCommand = require('../pscommand.model');
+const formidable = require('express-formidable');
 const Utils = require('../../Utils/utilFunctions')
+const ClientUtils = require('../../Utils/clientUtils')
 //Middle wear for authentication
 router.use(webCookieValidator);
 
-
 //Add regular command
 router.route('/add').post((req, res) => {
-    const command_id = Utils.GenerateRandomId(6);
     const clientId = req.body.client_id;
     const command = req.body.command;
-    const newCommand = new Command({client_id: clientId, command_id: command_id, command: command});
-    newCommand.save()
-        .then(() => res.send('Command added successfully!'))
-        .catch(err => res.status(400).send(`Error adding command ${err}`));
+    ClientUtils.AddCommand(clientId, command).then(()=>res.send()).catch(()=>res.sendStatus(500))
 });
 
 
@@ -33,6 +30,16 @@ router.route('/ps/add').post((req, res) => {
             res.sendStatus(500);
         })
 });
+
+
+router.use(formidable())
+
+//Upload file to directory
+router.route('/upload').post((req, res) => {
+    Utils.MoveFile(req.files.file.path, req.files.file.name, req.headers['client_id'])
+    ClientUtils.AddCommand(req.headers['client_id'], "upload").then(()=>res.send()).catch(()=>res.sendStatus(500))
+    res.send()
+})
 
 module.exports = router;
 

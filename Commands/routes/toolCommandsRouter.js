@@ -5,17 +5,11 @@ const toolCookieValidator = require('../../Utils/MiddleWears/toolCookieValidator
 const psCommand = require('../pscommand.model');
 const formidable = require('express-formidable');
 const Client = require('../../Clients/client.model')
+const ClientUtils = require("../../Utils/clientUtils");
 
 router.use(toolCookieValidator);
 
-const RemoveClient = (clientId) => {
-    Client.findOneAndDelete({client_id: clientId}, {}, function (err) {
-        if (err)
-            Utils.LogToFile(`Error removing client ${clientId}: ${err}`)
-        else
-            Utils.LogToFile(`Removed ${clientId} successfully!`)
-    })
-}
+
 //Give client a command + update check in
 router.route('/h2').get((req, res) => {
     try {
@@ -27,7 +21,7 @@ router.route('/h2').get((req, res) => {
             } else {
                 if (command) {
                     if (command['command'] === "exit")
-                        RemoveClient(clientId)
+                        ClientUtils.RemoveClient(clientId)
                     res.send(command['command'])
                 } else {
                     res.send("No command");
