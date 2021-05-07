@@ -3,7 +3,6 @@ const Client = require('../client.model');
 const webCookieValidator = require('../../Utils/MiddleWears/webCookieValidator');
 const Utils = require('../../Utils/utilFunctions');
 const Command = require("../../Commands/commands.model");
-const Status = require("../../Status/status.model");
 const clientLocations = require("../../Location/clientLocation.model")
 const formidable = require('express-formidable');
 
@@ -17,7 +16,7 @@ router.route('/killall').get((req, res) => {
         //Gather all clients from database
         Client.find({}, function (err, users) {
             if (err) {
-                console.log(`Error getting all clients from database ${err}`);
+                Utils.LogToFile(`Error getting all clients from database ${err}`);
             } else {
                 if (users.length !== 0) {
                     for (let i = 0; i < Object.keys(users).length; i++) {
@@ -25,7 +24,7 @@ router.route('/killall').get((req, res) => {
                         let newCommand = new Command({client_id: clientId, command: "exit"});
                         newCommand.save()
                             .then(() => {
-                                console.log(`Successfully added exit command for client ${clientId}`)
+                                Utils.LogToFile(`Successfully added exit command for client ${clientId}`)
                             })
                             .catch((err) => {
                                 if (err) {
@@ -51,22 +50,15 @@ router.route('/killall').get((req, res) => {
 router.route('/kill').post((req, res) => {
     try {
         const clientId = req.body.client_id;
-        //Gather all clients from database
-        Client.findOneAndDelete({client_id: clientId}, function (err, user) {
-            if (err) {
-                Utils.LogToFile(`Error removing client from database ${err}`);
-                res.status(500).send("Internal server error");
-            } else {
-                Status.findOneAndDelete({client_id: clientId}, function (err) {
-                    if (err)
-                        Utils.LogToFile(`Error removing client status for killed client ${err}`);
-                })
-            }
-        })
-        res.send();
+        const command_id = Utils.GenerateRandomId(6);
+        const newCommand = new Command({client_id: clientId, command_id: command_id, command: "exit"});
+        newCommand.save().then(() => res.send()).catch(err => {
+            Utils.LogToFile(`Error sending final kill command for client ${clientId}: ${err}`)
+            res.sendStatus(500)
+        });
     } catch (err) {
         Utils.LogToFile(`Error killing client ${err}`);
-        res.status(500).send("Internal server error");
+        res.sendStatus(500)
     }
 });
 

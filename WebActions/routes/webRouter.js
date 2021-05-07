@@ -41,7 +41,7 @@ router.route('/auth').get((req, res) => {
             }
         });
     } catch (err) {
-        console.log(err);
+        Utils.LogToFile(err);
         res.sendStatus(403);
     }
 });

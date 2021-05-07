@@ -4,7 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const database = require('./Database/connect');
 const cookieParser = require('cookie-parser');
-const utils = require('./Utils/utilFunctions')
+const Utils = require('./Utils/utilFunctions')
 
 require('dotenv').config()
 //Express config
@@ -25,16 +25,14 @@ const WebCommandsRouter = require('./Commands/routes/webCommandsRouter');
 const WebClientActionsRouter = require('./Clients/routes/webClientsRouter');
 const WebUserActions = require('./WebActions/routes/userActionsRouter');
 
-// app.options('*', cors(corsOptions))
-
 app.use('/tool/clients', ToolRouter);
 app.use('/tool/commands', CommandRouter)
+app.use('/tool/response', ToolResponsesRouter);
 app.use('/api', WebUserActions);
 app.use('/api/commands', WebCommandsRouter);
 app.use('/api/clients', WebClientActionsRouter);
-app.use('/tool/response', ToolResponsesRouter);
 app.use('/api/response', ApiResponsesRouter);
-app.use('/', WebActionsRouter);
+app.use('/web', WebActionsRouter);
 
 
 // Connect to DB
@@ -51,8 +49,8 @@ const httpsServer = https.createServer({
 
 httpsServer.listen(3000, () => {
     console.log(`HTTPS Server running on port ${port}`);
-    setInterval(function(){
-        utils.ValidateClients();
-    }, 50000)
+    setInterval(function () {
+        Utils.ValidateClients(Utils.GetCurrentTimeDate());
+    }, 5000)
 
 });

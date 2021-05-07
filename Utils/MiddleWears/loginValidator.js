@@ -9,7 +9,7 @@ module.exports = function loginValidate(req, res, next) {
         if (username && password) {
             WebClient.findOne({username: username, password: password}, function (err, user) {
                 if (err) {
-                    console.log(`Error authenticating webclient from database ${err}`);
+                    Utils.LogToFile(`Error authenticating webclient from database ${err}`);
                     res.status(403).send("Unauthorized!");
                 } else {
                     if (user !== null) {
@@ -40,7 +40,7 @@ module.exports = function loginValidate(req, res, next) {
             })
         }
     } catch (err) {
-        console.log(`Error parsing login request for authentication purpose ${err}`);
+        Utils.LogToFile(`Error parsing login request for authentication purpose ${err}`);
         res.status(403).send("Unauthorized!");
     }
 

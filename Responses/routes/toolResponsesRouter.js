@@ -3,7 +3,7 @@ const Response = require('../responses.model');
 const psResponse = require('../psResponse.model');
 const toolCookieValidator = require('../../Utils/MiddleWears/toolCookieValidator');
 const {GenerateRandomId} = require("../../Utils/utilFunctions");
-const Status = require("../../Status/status.model");
+
 const Utils = require("../../Utils/utilFunctions");
 const Client = require('../../Clients/client.model');
 const Command = require("../../Commands/commands.model");
@@ -20,12 +20,6 @@ router.route('/ps').post((req, res) => {
     newPsResponse.save()
         .then(() => res.send('ResponsePS added successfully!'))
         .catch(err => res.status(401).send(`Error adding ps command ${err}`));
-    Status.findOneAndUpdate({client_id: clientId}, {status: true}, {useFindAndModify: false},
-        function (err) {
-            if (err) {
-                Utils.LogToFile(`Error updating client ${clientId} status to DB`);
-            }
-        })
 });
 
 
@@ -34,18 +28,12 @@ router.route('/').post((req, res) => {
     const response_id = GenerateRandomId(6);
     const clientId = req.headers.clientid;
     const response = req.body.response;
-    const today = Utils.GetCurrentTimeDate();
-    const newResponse = new Response({response_id: response_id, client_id: clientId, response: response, date: today});
+    const currentTimeDate = Utils.GetCurrentTimeDate();
+    const newResponse = new Response({response_id: response_id, client_id: clientId, response: response, date: currentTimeDate});
     newResponse.save()
         .then(() => res.send('Response added successfully!'))
         .catch(err => res.status(400).send(`Error adding command ${err}`));
-
-    Status.findOneAndUpdate({client_id: clientId}, {status: true}, {useFindAndModify: false},
-        function (err) {
-            if (err)
-                Utils.LogToFile(`Error updating client ${clientId} status to DB`);
-        })
-    Client.findOneAndUpdate({client_id: clientId}, {lastActive: today}, {useFindAndModify: false},
+    Client.findOneAndUpdate({client_id: clientId}, {lastActive: currentTimeDate}, {useFindAndModify: false},
         function (err) {
             if (err)
                 Utils.LogToFile(`Error updating last active for client ${clientId}`);
@@ -60,10 +48,6 @@ router.route('/checkout').get((req, res) => {
         Client.findOneAndDelete({session_key: sessionKey}, {}, (err) => {
             if (err)
                 Utils.LogToFile(`Error removing tool client after checkout ${err}`);
-        });
-        Status.findOneAndDelete({client_id: clientId}, {}, (err) => {
-            if (err)
-                Utils.LogToFile(`Error removing status document for killed client ${err}`);
         });
         Command.find({}, (err, commands) => {
             if (err) {

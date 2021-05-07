@@ -3,8 +3,8 @@ const log = require('log-to-file');
 const fs = require('fs');
 const filesPath = "./Utils/uploads/"
 const Client = require('../Clients/client.model');
+const Utils = require("./utilFunctions");
 
-//Generate random client id
 const GenerateRandomId = (numOfChars) => {
     return Math.random().toString(36).substr(2, numOfChars);
 }
@@ -25,7 +25,7 @@ module.exports.LogToFile = LogToFile;
 
 const CreateDownloadsFolder = () => {
     fs.access("../Downloads", (err) => {
-        console.log(`Directory ${err ? 'does not exist' : 'exists'}`);
+        Utils.LogToFile(`Directory ${err ? 'does not exist' : 'exists'}`);
     });
 }
 module.exports.CreateDownloadsFolder = CreateDownloadsFolder;
@@ -46,8 +46,7 @@ const MoveFile = (src, dest, clientId) => {
 module.exports.MoveFile = MoveFile;
 
 
-const ParseCurrentTimeDate = () => {
-    let currentDateTime = GetCurrentTimeDate();
+const ParseCurrentTimeDate = (currentDateTime) => {
     let currentSplit = currentDateTime.split(',')
     let currentTime = currentSplit[1].trim()
     let currentDate = currentSplit[0].trim()
@@ -63,12 +62,12 @@ const DisconnectClient = (clientId) => {
     })
 }
 
-const ValidateClients = () => {
-    let parsed = ParseCurrentTimeDate()
+const ValidateClients = (currentTimeDate) => {
+    let parsed = ParseCurrentTimeDate(currentTimeDate)
     Client.find({}, function (err, users) {
-        if (err)
+        if (err) {
             LogToFile(`Error getting clients from DB for status check!, ${err}`)
-        if (users.length > 0) {
+        } else if (users.length > 0) {
             users.forEach((client) => {
                 let splitDateTime = client.lastActive.split(',')
                 let clientDate = splitDateTime[0].trim()
@@ -76,15 +75,16 @@ const ValidateClients = () => {
                     first.getFullYear() === second.getFullYear() &&
                     first.getMonth() === second.getMonth() &&
                     first.getDate() === second.getDate();
-                console.log(clientDate, parsed[0])
                 if (datesAreOnSameDay(new Date(clientDate), new Date(parsed[0]))) {
                     let clientTime = splitDateTime[1].trim()
                     let clientHours = clientTime.split(':')[0]
                     let clientMinutes = clientTime.split(':')[1].split(' ')[0]
                     if (parseInt(clientHours) === parseInt(parsed[1])) {
                         //Check if the client hasn't been active for 1 minutes
-                        if (Math.abs(parseInt(clientMinutes) - parseInt(parsed[2])) >= 1)
+                        if (Math.abs(parseInt(clientMinutes) - parseInt(parsed[2])) >= 1) {
                             DisconnectClient(client.client_id);
+                        }
+
                     }
                 } else {
                     DisconnectClient(client.client_id);

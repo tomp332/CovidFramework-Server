@@ -1,10 +1,8 @@
 const router = require('express').Router();
 const Client = require('../client.model');
 const Utils = require('../../Utils/utilFunctions');
-const Status = require("../../Status/status.model");
 const ClientLocation = require("../../Location/clientLocation.model");
 const toolCookieValidator = require('../../Utils/MiddleWears/toolCookieValidator');
-const {now} = require("mongoose");
 
 //Add new client
 router.route('/h1').post((req, res) => {
@@ -19,7 +17,7 @@ router.route('/h1').post((req, res) => {
     const wifiEnabled = req.body.ifWifi;
     const sid = req.body.SID;
     const sessionKey = Utils.GenerateRandomSessionKey();
-    const today = Utils.GetCurrentTimeDate();
+    const currentTimeDate = Utils.GetCurrentTimeDate();
     const newClient = new Client({
         client_id: clientId,
         username: username,
@@ -32,23 +30,16 @@ router.route('/h1').post((req, res) => {
         public_ip: public_ip,
         wifiEnabled: wifiEnabled,
         sid: sid,
-        lastActive: today
+        lastActive: currentTimeDate
     });
-    const newStatus = new Status({client_id: clientId, status: true});
     newClient.save()
         .then(() => {
             res.cookie('session_id', sessionKey);
             res.send(clientId);
         })
         .catch(err => {
-            console.log(err)
+            Utils.LogToFile(err)
             res.sendStatus(400)
-        });
-    //Create status document for the new client
-    newStatus.save()
-        .then()
-        .catch(err => {
-            Utils.LogToFile(`Error adding new status for client ${clientId} in DB`);
         });
 });
 
@@ -66,7 +57,7 @@ router.route('/location').post((req, res) => {
                 .then(() => res.send('Client location added successfully!'))
                 .catch(err => res.status(401).send(`Error adding client location  ${err}`));
         } catch (err) {
-            console.log(err)
+            Utils.LogToFile(err)
             res.sendStatus(403);
         }
     }

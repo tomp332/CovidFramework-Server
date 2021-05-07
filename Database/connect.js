@@ -1,4 +1,5 @@
 let mongoose = require('mongoose');
+const Utils = require("../Utils/utilFunctions");
 
 class Database {
     constructor(uri) {
@@ -11,11 +12,11 @@ class Database {
             useUnifiedTopology: true
         })
             .then(() => {
-                console.log("[+] Successfully connected to database!")
+                Utils.LogToFile("[+] Successfully connected to database!")
                 return mongoose.connection;
             })
             .catch(err => {
-                console.log(`[-] Error connecting to database ${err}`);
+                Utils.LogToFile(`[-] Error connecting to database ${err}`);
                 process.exit(1);
             })
     }

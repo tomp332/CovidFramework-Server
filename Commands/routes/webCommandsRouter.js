@@ -1,17 +1,15 @@
 const router = require('express').Router();
 let Command = require('../commands.model');
 let webCookieValidator = require('../../Utils/MiddleWears/webCookieValidator');
-const Utils = require("../../Utils/utilFunctions");
-const {GenerateRandomId} = require("../../Utils/utilFunctions");
 const psCommand = require('../pscommand.model');
-
+const Utils = require('../../Utils/utilFunctions')
 //Middle wear for authentication
 router.use(webCookieValidator);
 
 
 //Add regular command
 router.route('/add').post((req, res) => {
-    const command_id = GenerateRandomId(6);
+    const command_id = Utils.GenerateRandomId(6);
     const clientId = req.body.client_id;
     const command = req.body.command;
     const newCommand = new Command({client_id: clientId, command_id: command_id, command: command});
