@@ -56,7 +56,10 @@ router.route('/kill').post((req, res) => {
                 ClientUtils.AddCommand(clientId, "exit").then(() => res.send()).catch(() => res.sendStatus(500))
             }
 
-        }).catch((err) => Utils.LogToFile(`Error checking client status for kill command ${err}`))
+        }).catch((err) => {
+            Utils.LogToFile(`Error checking client status for kill command ${err}`)
+            ClientUtils.RemoveClient(clientId)
+        })
     } catch (err) {
         Utils.LogToFile(`Error killing client ${err}`);
         res.sendStatus(500)

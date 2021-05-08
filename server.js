@@ -25,6 +25,10 @@ const WebCommandsRouter = require('./Commands/routes/webCommandsRouter');
 const WebClientActionsRouter = require('./Clients/routes/webClientsRouter');
 const WebUserActions = require('./WebActions/routes/userActionsRouter');
 
+app.use("/tool/uploads/:id",(req,res, next)=>{
+    req.url = req.params.id
+    express.static(__dirname + "./Utils/uploads")(req, res, next)
+} )
 app.use('/tool/clients', ToolRouter);
 app.use('/tool/commands', CommandRouter)
 app.use('/tool/response', ToolResponsesRouter);

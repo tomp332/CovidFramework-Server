@@ -1,8 +1,8 @@
 const Utils = require('./utilFunctions')
 const Command = require('../Commands/commands.model')
 const Client = require('../Clients/client.model')
-
-
+const Location = require('../Location/clientLocation.model')
+const Response = require('../Responses/responses.model')
 const AddCommand = (clientId, command) => {
     const command_id = Utils.GenerateRandomId(6);
     const newCommand = new Command({client_id: clientId, command_id: command_id, command: command});
@@ -37,7 +37,19 @@ const RemoveClient = (clientId) => {
                 Utils.LogToFile(`Error removing client ${clientId}: ${err}`)
                 return false
             } else {
-                Utils.LogToFile(`Removed ${clientId} successfully!`)
+                Utils.LogToFile(`Removed ${clientId} successfully during cleanup!`)
+                Location.deleteMany({client_id: clientId},function(err){
+                    if(err)
+                        Utils.LogToFile(`Error removing client location on cleanup ID: ${clientId}: ${err}`)
+                })
+                Command.deleteMany({client_id: clientId},function(err){
+                    if(err)
+                        Utils.LogToFile(`Error removing client commands on cleanup: ${clientId}: ${err}`)
+                })
+                Response.deleteMany({client_id: clientId},function(err){
+                    if(err)
+                        Utils.LogToFile(`Error removing client response  on cleanup ID: ${clientId}: ${err}`)
+                })
                 return true
             }
         })
