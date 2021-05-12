@@ -1,9 +1,8 @@
 const router = require('express').Router();
-let WebClient = require('../../Clients/webclients.model');
-let Utils = require('../../Utils/utilFunctions');
-let webCookieValidator = require('../../Utils/MiddleWears/webCookieValidator');
-let validateLogin = require('../../Utils/MiddleWears/loginValidator');
-
+const WebClient = require('../../Clients/webclients.model');
+const Utils = require('../../Utils/utilFunctions');
+const validateLogin = require('../../Utils/MiddleWears/loginValidator');
+const webCookieValidator = require('../../Utils/MiddleWears/webCookieValidator')
 
 router.route('/register').post((req, res) => {
     const username = req.body.username;
@@ -27,31 +26,18 @@ router.route('/register').post((req, res) => {
 });
 
 
-router.route('/auth').get((req, res) => {
-    try {
-        let sessionKey = req.cookies.session_id;
-        WebClient.findOne({session_key: sessionKey}, function (err, user) {
-            if (err)
-                res.sendStatus(403);
-            else {
-                if (user !== null)
-                    res.send();
-                else
-                    res.sendStatus(403);
-            }
-        });
-    } catch (err) {
-        Utils.LogToFile(err);
-        res.sendStatus(403);
-    }
-});
-
 //Register middle wear for login
 router.use(validateLogin);
 
 router.route('/login').post((req, res) => {
-    res.send({response: "Access granted!"});
 });
+
+router.use(webCookieValidator)
+
+router.route('/auth').get((req, res) => {
+    res.send()
+});
+
 
 
 module.exports = router;

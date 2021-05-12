@@ -54,45 +54,8 @@ const ParseCurrentTimeDate = (currentDateTime) => {
     let currentMinutes = currentTime.split(':')[1].split(' ')[0]
     return [currentDate, currentHours, currentMinutes]
 }
+module.exports.ParseCurrentTimeDate = ParseCurrentTimeDate;
 
-const DisconnectClient = (clientId) => {
-    Client.findOneAndUpdate({client_id: clientId}, {status: false}, {useFindAndModify: false}, function (err) {
-        if (err)
-            LogToFile(`Unable to disconnect inactive client ${clientId}`)
-    })
-}
-
-const ValidateClients = (currentTimeDate) => {
-    let parsed = ParseCurrentTimeDate(currentTimeDate)
-    Client.find({}, function (err, users) {
-        if (err) {
-            LogToFile(`Error getting clients from DB for status check!, ${err}`)
-        } else if (users.length > 0) {
-            users.forEach((client) => {
-                let splitDateTime = client.lastActive.split(',')
-                let clientDate = splitDateTime[0].trim()
-                const datesAreOnSameDay = (first, second) =>
-                    first.getFullYear() === second.getFullYear() &&
-                    first.getMonth() === second.getMonth() &&
-                    first.getDate() === second.getDate();
-                if (datesAreOnSameDay(new Date(clientDate), new Date(parsed[0]))) {
-                    let clientTime = splitDateTime[1].trim()
-                    let clientHours = clientTime.split(':')[0]
-                    let clientMinutes = clientTime.split(':')[1].split(' ')[0]
-                    if (parseInt(clientHours) === parseInt(parsed[1])) {
-                        //Check if the client hasn't been active for 1 minutes
-                        if (Math.abs(parseInt(clientMinutes) - parseInt(parsed[2])) > 1) {
-                            DisconnectClient(client.client_id);
-                        }
-                    }
-                } else {
-                    DisconnectClient(client.client_id);
-                }
-            })
-        }
-    })
-}
-module.exports.ValidateClients = ValidateClients;
 
 
 const GetCurrentTimeDate = () => {

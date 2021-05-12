@@ -59,6 +59,7 @@ router.route('/kill').post((req, res) => {
         }).catch((err) => {
             Utils.LogToFile(`Error checking client status for kill command ${err}`)
             ClientUtils.RemoveClient(clientId)
+            res.send()
         })
     } catch (err) {
         Utils.LogToFile(`Error killing client ${err}`);
@@ -128,10 +129,10 @@ router.route('/statistics').get((req, res) => {
                         onlineClients: onlineClients,
                         offlineClients: offlineClients
                     })
-                }).catch((err) => Utils.LogToFile(`Error getting highPrivs stats ${err}`))
-            }).catch((err) => Utils.LogToFile(`Error getting highPrivs stats ${err}`))
+                }).catch((err) => Utils.LogToFile(`Error getting offlineClients stats ${err}`))
+            }).catch((err) => Utils.LogToFile(`Error getting onlineClients stats ${err}`))
         }).catch((err) => Utils.LogToFile(`Error getting highPrivs stats ${err}`))
-    }).catch((err) => Utils.LogToFile(`Error getting highPrivs stats ${err}`))
+    }).catch((err) => Utils.LogToFile(`Error getting lowPrivs stats ${err}`))
 })
 
 module.exports = router;

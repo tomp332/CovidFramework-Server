@@ -12,7 +12,6 @@ router.use(webCookieValidator);
 router.route('/add').post((req, res) => {
     const clientId = req.body.client_id;
     const command = req.body.command;
-    console.log(command)
     ClientUtils.AddCommand(clientId, command).then(() => res.send()).catch(() => res.sendStatus(500))
 });
 

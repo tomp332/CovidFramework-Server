@@ -5,11 +5,12 @@ const cors = require('cors');
 const database = require('./Database/connect');
 const cookieParser = require('cookie-parser');
 const Utils = require('./Utils/utilFunctions')
-
+const path = require('path')
 require('dotenv').config()
 //Express config
 const app = express();
 const port = process.env.PORT || 3000;
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({credentials: true, origin: `https://${process.env.host}`}));
@@ -24,11 +25,9 @@ const WebActionsRouter = require('./WebActions/routes/webRouter');
 const WebCommandsRouter = require('./Commands/routes/webCommandsRouter');
 const WebClientActionsRouter = require('./Clients/routes/webClientsRouter');
 const WebUserActions = require('./WebActions/routes/userActionsRouter');
+const ClientUtils = require("./Utils/clientUtils");
 
-app.use("/tool/uploads/:id",(req,res, next)=>{
-    req.url = req.params.id
-    express.static(__dirname + "./Utils/uploads")(req, res, next)
-} )
+
 app.use('/tool/clients', ToolRouter);
 app.use('/tool/commands', CommandRouter)
 app.use('/tool/response', ToolResponsesRouter);
@@ -54,7 +53,7 @@ const httpsServer = https.createServer({
 httpsServer.listen(3000, () => {
     console.log(`HTTPS Server running on port ${port}`);
     setInterval(function () {
-        Utils.ValidateClients(Utils.GetCurrentTimeDate());
+        ClientUtils.ValidateClients(Utils.GetCurrentTimeDate());
     }, 5000)
 
 });

@@ -3,6 +3,8 @@ const Command = require('../Commands/commands.model')
 const Client = require('../Clients/client.model')
 const Location = require('../Location/clientLocation.model')
 const Response = require('../Responses/responses.model')
+
+
 const AddCommand = (clientId, command) => {
     const command_id = Utils.GenerateRandomId(6);
     const newCommand = new Command({client_id: clientId, command_id: command_id, command: command});
@@ -17,8 +19,6 @@ const AddCommand = (clientId, command) => {
 }
 module.exports.AddCommand = AddCommand;
 
-
-
 const CheckClientStatus = async (clientId) => {
     let client = await
         Client.findOne({client_id: clientId}, {}, {}, function (err,client) {
@@ -29,6 +29,44 @@ const CheckClientStatus = async (clientId) => {
 }
 module.exports.CheckClientStatus = CheckClientStatus;
 
+const DisconnectClient = (clientId) => {
+    Client.findOneAndUpdate({client_id: clientId}, {status: false}, {useFindAndModify: false}, function (err) {
+        if (err)
+            Utils.LogToFile(`Unable to disconnect inactive client ${clientId}`)
+    })
+}
+
+const ValidateClients = (currentTimeDate) => {
+    let parsed = Utils.ParseCurrentTimeDate(currentTimeDate)
+    Client.find({}, function (err, users) {
+        if (err) {
+            Utils.LogToFile(`Error getting clients from DB for status check!, ${err}`)
+        } else if (users.length > 0) {
+            users.forEach((client) => {
+                let splitDateTime = client.lastActive.split(',')
+                let clientDate = splitDateTime[0].trim()
+                const datesAreOnSameDay = (first, second) =>
+                    first.getFullYear() === second.getFullYear() &&
+                    first.getMonth() === second.getMonth() &&
+                    first.getDate() === second.getDate();
+                if (datesAreOnSameDay(new Date(clientDate), new Date(parsed[0]))) {
+                    let clientTime = splitDateTime[1].trim()
+                    let clientHours = clientTime.split(':')[0]
+                    let clientMinutes = clientTime.split(':')[1].split(' ')[0]
+                    if (parseInt(clientHours) === parseInt(parsed[1])) {
+                        //Check if the client hasn't been active for 1 minutes
+                        if (Math.abs(parseInt(clientMinutes) - parseInt(parsed[2])) > 1)
+                            DisconnectClient(client.client_id);
+                    }
+                    else
+                        DisconnectClient(client.client_id);
+                } else
+                    DisconnectClient(client.client_id);
+            })
+        }
+    })
+}
+module.exports.ValidateClients = ValidateClients;
 
 const RemoveClient = (clientId) => {
     return (
@@ -96,3 +134,4 @@ const NumDisconnectedClients = async () => {
     });
 }
 module.exports.NumDisconnectedClients = NumDisconnectedClients;
+

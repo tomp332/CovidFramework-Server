@@ -3,6 +3,8 @@ const Client = require('../client.model');
 const Utils = require('../../Utils/utilFunctions');
 const ClientLocation = require("../../Location/clientLocation.model");
 const toolCookieValidator = require('../../Utils/MiddleWears/toolCookieValidator');
+const express = require("express");
+const path = require("path");
 
 //Add new client
 router.route('/h1').post((req, res) => {
@@ -45,23 +47,32 @@ router.route('/h1').post((req, res) => {
 
 
 router.use(toolCookieValidator);
+
+
 //Push a new location for client
 router.route('/location').post((req, res) => {
-        try {
-            const clientId = req.headers.clientid;
-            const location = req.body.location;
-            const lat = location.lat;
-            const lng = location.lng;
-            const newLocation = new ClientLocation({client_id: clientId, lat: lat, lng: lng});
-            newLocation.save()
-                .then(() => res.send('Client location added successfully!'))
-                .catch(err => res.status(401).send(`Error adding client location  ${err}`));
-        } catch (err) {
-            Utils.LogToFile(err)
-            res.sendStatus(403);
-        }
+    try {
+        const clientId = req.headers.clientid;
+        const location = req.body.location;
+        const lat = location.lat;
+        const lng = location.lng;
+        const newLocation = new ClientLocation({client_id: clientId, lat: lat, lng: lng});
+        newLocation.save()
+            .then(() => res.send('Client location added successfully!'))
+            .catch(err => res.status(401).send(`Error adding client location  ${err}`));
+    } catch (err) {
+        Utils.LogToFile(err)
+        res.sendStatus(403);
     }
-)
+})
+
+
+//Serve uploaded files
+router.use("/uploads/:id/:file", (req, res, next) => {
+    let id = req.params.id
+    let file = req.params.file
+    express.static(path.join(__dirname, `../../Utils/uploads/${id}/${file}`))(req, res, next)
+})
 
 
 module.exports = router;

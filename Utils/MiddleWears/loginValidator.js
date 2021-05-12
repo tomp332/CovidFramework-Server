@@ -13,25 +13,20 @@ module.exports = function loginValidate(req, res, next) {
                     res.status(403).send("Unauthorized!");
                 } else {
                     if (user !== null) {
-                        let sessionKey = Utils.GenerateRandomSessionKey();
+                        let payload = {
+                            date:new Date(),
+                            user:username
+                        }
+                        let token = jwt.sign(payload, process.env.secret, {expiresIn: '24h'})
+                        // let refreshToken = jwt.sign(payload, process.env.refresh_secret)
                         WebClient.findOneAndUpdate({username: username, password: password},
-                            {session_key: sessionKey}, {useFindAndModify: false}, function (err) {
+                            {session_key: token}, {useFindAndModify: false}, function (err) {
                                 if (err) {
                                     Utils.LogToFile(`Error updating client cookie to DB ${err}`);
                                     res.status(500).send("Server error");
                                 }
-                            })
-                        res.cookie('session_id', sessionKey, {
-                            maxAge: 60 * 60 * 1000000,
-                            secure: false,
-                            sameSite: 'none',
                         })
-
-                        res.cookie('session', username, {
-                            maxAge: 60 * 60 * 1000000,
-                            secure: false,
-                            sameSite: 'none',
-                        })
+                        res.send({auth: true, token: token})
                         next();
                     } else {
                         res.status(403).send("Not granted!");
