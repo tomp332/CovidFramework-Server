@@ -41,7 +41,7 @@ app.use('/web', WebActionsRouter);
 // Connect to DB
 const uri = process.env.ATLAS_URI;
 const Database = new database(uri);
-const connection = Database.connectToDB();
+Database.connectToDB();
 
 
 const httpsServer = https.createServer({
