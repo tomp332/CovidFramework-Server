@@ -41,7 +41,7 @@ router.route('/h1').post((req, res) => {
         })
         .catch(err => {
             Utils.LogToFile(err)
-            res.sendStatus(400)
+            res.sendStatus(403)
         });
 });
 

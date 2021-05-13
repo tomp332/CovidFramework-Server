@@ -2,7 +2,6 @@ const crypto = require("crypto");
 const log = require('log-to-file');
 const fs = require('fs');
 const filesPath = "./Utils/uploads/"
-const Client = require('../Clients/client.model');
 const Utils = require("./utilFunctions");
 
 const GenerateRandomId = (numOfChars) => {

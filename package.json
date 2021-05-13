@@ -18,7 +18,8 @@
     "express": "^4.17.1",
     "express-formidable": "^1.2.0",
     "log-to-file": "^2.0.2",
-    "mongoose": "^5.11.16"
+    "mongoose": "^5.11.16",
+    "python-shell": "^3.0.0"
   },
   "devDependencies": {
     "cookie-parser": "^1.4.5",

