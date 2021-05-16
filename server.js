@@ -15,7 +15,6 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({credentials: true, origin: `https://${process.env.HOST}`}));
 
-
 //Routes
 const ToolRouter = require('./Clients/routes/clientsRouter');
 const CommandRouter = require('./Commands/routes/toolCommandsRouter');
@@ -52,7 +51,6 @@ const httpsServer = https.createServer({
 
 httpsServer.listen(port, async () => {
     await Database.connectToDB();
-    console.log(process.env.SECRET)
     console.log(`HTTPS Server running on port ${port}`);
     setInterval(function () {
         ClientUtils.ValidateClients(Utils.GetCurrentTimeDate());
