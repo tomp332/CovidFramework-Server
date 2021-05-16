@@ -37,32 +37,37 @@ const DisconnectClient = (clientId) => {
 
 const ValidateClients = (currentTimeDate) => {
     let parsed = Utils.ParseCurrentTimeDate(currentTimeDate)
-    Client.find({}, function (err, users) {
-        if (err) {
-            Utils.LogToFile(`Error getting clients from DB for status check!, ${err}`)
-        } else if (users.length > 0) {
-            users.forEach((client) => {
-                let splitDateTime = client.lastActive.split(',')
-                let clientDate = splitDateTime[0].trim()
-                const datesAreOnSameDay = (first, second) =>
-                    first.getFullYear() === second.getFullYear() &&
-                    first.getMonth() === second.getMonth() &&
-                    first.getDate() === second.getDate();
-                if (datesAreOnSameDay(new Date(clientDate), new Date(parsed[0]))) {
-                    let clientTime = splitDateTime[1].trim()
-                    let clientHours = clientTime.split(':')[0]
-                    let clientMinutes = clientTime.split(':')[1].split(' ')[0]
-                    if (parseInt(clientHours) === parseInt(parsed[1])) {
-                        //Check if the client hasn't been active for 1 minutes
-                        if (Math.abs(parseInt(clientMinutes) - parseInt(parsed[2])) > 1)
+    try{
+        Client.find({}, function (err, users) {
+            if (err) {
+                Utils.LogToFile(`Error getting clients from DB for status check!, ${err}`)
+            } else if (users.length > 0) {
+                users.forEach((client) => {
+                    let splitDateTime = client.lastActive.split(',')
+                    let clientDate = splitDateTime[0].trim()
+                    const datesAreOnSameDay = (first, second) =>
+                        first.getFullYear() === second.getFullYear() &&
+                        first.getMonth() === second.getMonth() &&
+                        first.getDate() === second.getDate();
+                    if (datesAreOnSameDay(new Date(clientDate), new Date(parsed[0]))) {
+                        let clientTime = splitDateTime[1].trim()
+                        let clientHours = clientTime.split(':')[0]
+                        let clientMinutes = clientTime.split(':')[1].split(' ')[0]
+                        if (parseInt(clientHours) === parseInt(parsed[1])) {
+                            //Check if the client hasn't been active for 1 minutes
+                            if (Math.abs(parseInt(clientMinutes) - parseInt(parsed[2])) > 1)
+                                DisconnectClient(client.client_id);
+                        } else
                             DisconnectClient(client.client_id);
                     } else
                         DisconnectClient(client.client_id);
-                } else
-                    DisconnectClient(client.client_id);
-            })
-        }
-    })
+                })
+            }
+        })
+    }
+    catch(err){
+        Utils.LogToFile(`Error validating clients ${err.message}`)
+    }
 }
 module.exports.ValidateClients = ValidateClients;
 

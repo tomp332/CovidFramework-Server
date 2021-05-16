@@ -13,7 +13,7 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({credentials: true, origin: `https://${process.env.host}`}));
+app.use(cors({credentials: true, origin: `https://${process.env.HOST}`}));
 
 
 //Routes
@@ -41,7 +41,7 @@ app.use('/web', WebActionsRouter);
 // Connect to DB
 const uri = process.env.ATLAS_URI;
 const Database = new database(uri);
-Database.connectToDB();
+
 
 
 const httpsServer = https.createServer({
@@ -50,10 +50,11 @@ const httpsServer = https.createServer({
 }, app);
 
 
-httpsServer.listen(3000, () => {
+httpsServer.listen(port, async () => {
+    await Database.connectToDB();
+    console.log(process.env.SECRET)
     console.log(`HTTPS Server running on port ${port}`);
     setInterval(function () {
         ClientUtils.ValidateClients(Utils.GetCurrentTimeDate());
     }, 5000)
-
 });

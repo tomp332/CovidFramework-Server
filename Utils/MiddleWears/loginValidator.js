@@ -2,6 +2,7 @@ let WebClient = require('../../Clients/webclients.model');
 const Utils = require("../utilFunctions");
 const jwt = require('jsonwebtoken');
 
+
 module.exports = function loginValidate(req, res, next) {
     try {
         let username = req.body.username;
@@ -14,7 +15,7 @@ module.exports = function loginValidate(req, res, next) {
                 } else {
                     if (user !== null) {
                         let payload = {user:username}
-                        let token = jwt.sign(payload, process.env.secret, {expiresIn: '24h'})
+                        let token = jwt.sign(payload, process.env.SECRET, {expiresIn: '24h'})
                         WebClient.findOneAndUpdate({username: username, password: password},
                             {session_key: token}, {useFindAndModify: false}, function (err) {
                                 if (err) {
