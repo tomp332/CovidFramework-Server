@@ -16,7 +16,7 @@ app.use(cookieParser());
 // app.use(cors({credentials: true, origin: `https://${process.env.HOST}`}));
 
 var corsOptions = {
-  origin: "https://localhost"
+  origin: "https://frontend"
 };
 
 app.use(cors(corsOptions));
