@@ -19,6 +19,8 @@ app.use(cookieParser());
 let allowedOrigins = ['https://35.234.91.68:3000', 'https://localhost:3000'];
 app.use(cors({
   origin: function(origin, callback){
+    console.log(origin)
+    Utils.LogToFile(origin)
     if(!origin) return callback(null, true);    
     if(allowedOrigins.indexOf(origin) === -1){
       var msg = 'The CORS policy for this site does not ' + 'allow access from the specified Origin.';

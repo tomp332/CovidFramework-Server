@@ -4,8 +4,6 @@ const jwt = require('jsonwebtoken');
 
 
 module.exports = function loginValidate(req, res, next) {
-    console.log(req.headers)
-    Utils.LogToFile(req.headers)
     try {
         let username = req.body.username;
         let password = req.body.password;
