@@ -30,7 +30,6 @@ router.route('/register').post((req, res) => {
 router.use(validateLogin);
 
 router.route('/login').post((req, res) => {
-    console.log(req.headers)
 });
 
 router.use(webCookieValidator)
