@@ -15,18 +15,11 @@ app.use(express.json());
 app.use(cookieParser());
 // app.use(cors({credentials: true, origin: `https://${process.env.HOST}`}));
 
-const whitelist = ['https://35.234.91.68:3000', 'https://localhost:3000', 'https://backend:3000']
-let corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  },
-}
-//app.use(cors(corsOptions))
-app.use(cors())
+var corsOptions = {
+  origin: "https://localhost"
+};
+
+app.use(cors(corsOptions));
 
 //Routes
 const ToolRouter = require('./Clients/routes/clientsRouter');
