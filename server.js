@@ -27,6 +27,7 @@ let corsOptions = {
 }
 //app.use(cors(corsOptions))
 app.use(cors())
+app.options('*', cors());
 
 //Routes
 const ToolRouter = require('./Clients/routes/clientsRouter');
