@@ -13,7 +13,19 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({credentials: true, origin: `https://${process.env.HOST}`}));
+// app.use(cors({credentials: true, origin: `https://${process.env.HOST}`}));
+
+const whitelist = ['https://35.234.91.68', 'https://localhost', 'https://frontend']
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+}
+app.use(cors(corsOptions))
 
 //Routes
 const ToolRouter = require('./Clients/routes/clientsRouter');
