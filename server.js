@@ -13,9 +13,21 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({credentials: true, origin: `https://${process.env.HOST}`}));
 
-// app.use(cors(corsOptions));
+// app.use(cors({credentials: true, origin: `https://${process.env.HOST}`}));
+
+let allowedOrigins = ['https://35.234.91.68:3000', 'https://localhost:3000'];
+app.use(cors({
+  origin: function(origin, callback){
+    if(!origin) return callback(null, true);    
+    if(allowedOrigins.indexOf(origin) === -1){
+      var msg = 'The CORS policy for this site does not ' + 'allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }    
+    return callback(null, true);
+  }
+}));
+
 
 //Routes
 const ToolRouter = require('./Clients/routes/clientsRouter');
