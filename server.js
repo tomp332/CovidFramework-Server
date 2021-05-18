@@ -13,13 +13,9 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cookieParser());
-// app.use(cors({credentials: true, origin: `https://${process.env.HOST}`}));
+app.use(cors({credentials: true, origin: `https://${process.env.HOST}`}));
 
-var corsOptions = {
-  origin: "https://frontend"
-};
-
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 //Routes
 const ToolRouter = require('./Clients/routes/clientsRouter');
