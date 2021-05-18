@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(cookieParser());
 // app.use(cors({credentials: true, origin: `https://${process.env.HOST}`}));
 
-const whitelist = ['https://35.234.91.68:3000', 'https://localhost:3000', 'https://frontend']
+const whitelist = ['https://35.234.91.68:3000', 'https://localhost:3000', 'https://backend']
 let corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
