@@ -16,7 +16,8 @@ app.use(cookieParser());
 
 // app.use(cors({credentials: true, origin: `https://${process.env.HOST}`}));
 
-let allowedOrigins = ['https://35.234.91.68:3000', 'https://localhost:3000', 'https://localhost:4443', 'https://localhost'];
+let allowedOrigins = ['https://35.234.91.68:3000', 'https://localhost:3000', 'https://localhost:4443', 
+'https://localhost', 'https://frontend:443', 'https://frontend','https://backend:443', 'https://backend:3000', 'https://backend'];
 app.use(cors({
   origin: function(origin, callback){
     console.log(origin)
