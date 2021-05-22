@@ -12,7 +12,7 @@ router.use(webCookieValidator);
 router.route('/add').post((req, res) => {
     const clientId = req.body.client_id;
     const command = req.body.command;
-    ClientUtils.AddCommand(clientId, command).then(()=>res.send()).catch(()=>res.sendStatus(500))
+    ClientUtils.AddCommand(clientId, command).then(() => res.send()).catch(() => res.sendStatus(500))
 });
 
 
@@ -31,13 +31,11 @@ router.route('/ps/add').post((req, res) => {
         })
 });
 
-
 router.use(formidable())
 
 //Upload file to directory
 router.route('/upload').post((req, res) => {
     Utils.MoveFile(req.files.file.path, req.files.file.name, req.headers['client_id'])
-    ClientUtils.AddCommand(req.headers['client_id'], "upload").then(()=>res.send()).catch(()=>res.sendStatus(500))
     res.send()
 })
 

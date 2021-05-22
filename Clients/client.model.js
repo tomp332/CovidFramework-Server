@@ -15,7 +15,14 @@ let clientSchema = new Schema({
     ipv4: String,
     wifiEnabled: Boolean,
     sid: String,
-    lastActive: String
+    lastActive: String,
+    location: {
+        lat: Number,
+        lng: Number,
+        country:String,
+        city: String,
+        home_address: String
+    }
 }, {versionKey: false});
 
 const Client = mongoose.model('Client', clientSchema);

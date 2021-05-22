@@ -9,14 +9,14 @@ module.exports = function toolCookieValidator(req, res, next) {
         Client.findOne({client_id: clientId, session_key: sessionKey}, function (err, user) {
             if (err) {
                 Utils.LogToFile(`Error finding user in database for authentication ${err}`);
-                res.status(401).send("Unauthorized!");
+                res.status(403).send("Unauthorized!");
             } else {
                 if (user)
                     next();
                 else
-                    res.status(500).send("Unauthorized!");
+                    res.status(403).send("Unauthorized!");
             }
         })
     } else
-        res.status(401).send("Unauthorized!");
+        res.status(403).send("Unauthorized!");
 }

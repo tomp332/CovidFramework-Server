@@ -6,8 +6,9 @@ class Database {
         this.uri = uri;
     }
 
-    connectToDB() {
-        mongoose.connect(this.uri, {
+    async connectToDB() {
+        console.log("Trying to connect to DB....")
+        await mongoose.connect(this.uri, {
             useNewUrlParser: true,
             useUnifiedTopology: true
         })
@@ -17,7 +18,7 @@ class Database {
             })
             .catch(err => {
                 Utils.LogToFile(`[-] Error connecting to database ${err}`);
-                process.exit(1);
+                // process.exit(1);
             })
     }
 }

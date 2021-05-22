@@ -1,24 +1,17 @@
-const WebClient = require('../../Clients/webclients.model');
-const Utils = require("../utilFunctions");
+const jwt = require("jsonwebtoken");
 
 module.exports = function webCookieValidator(req, res, next) {
     try {
-        let sessionKey = req.cookies['session_id'];
-        if (sessionKey !== null) {
-            //Add validation that the session id exists
-            WebClient.findOne({session_key: sessionKey}, {}, {useFindAndModify: false}, function (err, user) {
-                if (err) {
-                    Utils.LogToFile(`Error finding user in database for authentication ${err}`);
-                    res.status(401).send("Unauthorized!");
-                } else {
-                    if (user) {
-                        next();
-                    }
-                }
-            })
-        } else
-            res.status(401).send("Unauthorized!");
+        let token = req.headers['x-access-token']
+        if (token == null) return res.sendStatus(401);
+        jwt.verify(token, process.env.SECRET.toString(), (err, auth) => {
+            if (err) {
+                console.log(`Token err , ${err.message}`)
+                return res.sendStatus(403);
+            }
+            next();
+        });
     } catch (err) {
-        res.status(500).send("Internal server error!");
+        res.sendStatus(403)
     }
 };

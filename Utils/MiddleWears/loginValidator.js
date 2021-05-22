@@ -2,8 +2,10 @@ let WebClient = require('../../Clients/webclients.model');
 const Utils = require("../utilFunctions");
 const jwt = require('jsonwebtoken');
 
+
 module.exports = function loginValidate(req, res, next) {
     try {
+        console.log("HEREEE!!!")
         let username = req.body.username;
         let password = req.body.password;
         if (username && password) {
@@ -13,25 +15,16 @@ module.exports = function loginValidate(req, res, next) {
                     res.status(403).send("Unauthorized!");
                 } else {
                     if (user !== null) {
-                        let sessionKey = Utils.GenerateRandomSessionKey();
+                        let payload = {user:username}
+                        let token = jwt.sign(payload, process.env.SECRET, {expiresIn: '24h'})
                         WebClient.findOneAndUpdate({username: username, password: password},
-                            {session_key: sessionKey}, {useFindAndModify: false}, function (err) {
+                            {session_key: token}, {useFindAndModify: false}, function (err) {
                                 if (err) {
                                     Utils.LogToFile(`Error updating client cookie to DB ${err}`);
                                     res.status(500).send("Server error");
                                 }
-                            })
-                        res.cookie('session_id', sessionKey, {
-                            maxAge: 60 * 60 * 1000000,
-                            secure: false,
-                            sameSite: 'none',
                         })
-
-                        res.cookie('session', username, {
-                            maxAge: 60 * 60 * 1000000,
-                            secure: false,
-                            sameSite: 'none',
-                        })
+                        res.send({auth: true, token: token})
                         next();
                     } else {
                         res.status(403).send("Not granted!");
