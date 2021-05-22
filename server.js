@@ -16,7 +16,7 @@ app.use(cookieParser());
 
 // app.use(cors({credentials: true, origin: `https://${process.env.HOST}`}));
 
-let allowedOrigins = ['https://35.207.83.62:3000', 'https://35.207.83.62:443', 'https://35.207.83.62','https://localhost:3000', 'https://localhost:4443', 
+let allowedOrigins = ['https://www.covidframework.com', 'https://35.207.83.62:3000', 'https://35.207.83.62:443', 'https://35.207.83.62','https://localhost:3000', 'https://localhost:4443', 
 'https://localhost', 'https://frontend:443', 'https://frontend','https://backend:443', 'https://backend:3000', 'https://backend'];
 app.use(cors({
   origin: function(origin, callback){
