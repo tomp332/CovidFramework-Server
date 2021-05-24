@@ -51,7 +51,7 @@ if(process.env.NODE_PRODUCTION === 'development') {
 else{
     httpsServer= https.createServer({
         key: fs.readFileSync('./.cert/covidframework.com/privkey.pem'),
-        cert: fs.readFileSync('./.cert/cert.pem'),
+        cert: fs.readFileSync('./.cert/covidframework.com/cert.pem'),
     }, app);
 }
 
