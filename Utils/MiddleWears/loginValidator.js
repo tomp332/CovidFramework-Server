@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken');
 
 module.exports = function loginValidate(req, res, next) {
     try {
-        console.log("Backend received a request for login")
         let username = req.body.username;
         let password = req.body.password;
         if (username && password) {
