@@ -5,7 +5,7 @@ const cors = require('cors');
 const database = require('./Database/connect');
 const cookieParser = require('cookie-parser');
 const Utils = require('./Utils/utilFunctions')
-const path = require('path')
+
 require('dotenv').config()
 //Express config
 const app = express();
