@@ -40,13 +40,21 @@ app.use('/web', WebActionsRouter);
 // Connect to DB
 const uri = process.env.ATLAS_URI;
 const Database = new database(uri);
+let httpsServer = null
 
+if(process.env.NODE_PRODUCTION) {
+    httpsServer= https.createServer({
+        key: fs.readFileSync('./.cert/covidframework.com/privkey.pem'),
+        cert: fs.readFileSync('./.cert/cert.pem'),
+    }, app);
+}
+else{
+    httpsServer = https.createServer({
+        key: fs.readFileSync('./.cert/RootCA.key'),
+        cert: fs.readFileSync('./.cert/RootCA.crt'),
+    }, app);
+}
 
-
-const httpsServer = https.createServer({
-    key: fs.readFileSync('./.cert/RootCA.key'),
-    cert: fs.readFileSync('./.cert/RootCA.crt'),
-}, app);
 
 
 httpsServer.listen(port, async () => {
