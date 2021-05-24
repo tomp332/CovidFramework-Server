@@ -42,16 +42,16 @@ const uri = process.env.ATLAS_URI;
 const Database = new database(uri);
 let httpsServer = null
 
-if(process.env.NODE_PRODUCTION) {
-    httpsServer= https.createServer({
-        key: fs.readFileSync('./.cert/covidframework.com/privkey.pem'),
-        cert: fs.readFileSync('./.cert/cert.pem'),
-    }, app);
-}
-else{
+if(process.env.NODE_PRODUCTION === 'development') {
     httpsServer = https.createServer({
         key: fs.readFileSync('./.cert/RootCA.key'),
         cert: fs.readFileSync('./.cert/RootCA.crt'),
+    }, app);
+}
+else{
+    httpsServer= https.createServer({
+        key: fs.readFileSync('./.cert/covidframework.com/privkey.pem'),
+        cert: fs.readFileSync('./.cert/cert.pem'),
     }, app);
 }
 
