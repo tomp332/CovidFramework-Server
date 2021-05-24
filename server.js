@@ -44,8 +44,8 @@ let httpsServer = null
 
 if(process.env.NODE_PRODUCTION === 'development') {
     httpsServer = https.createServer({
-        key: fs.readFileSync('./.cert/RootCA.key'),
-        cert: fs.readFileSync('./.cert/RootCA.crt'),
+        key: fs.readFileSync('./.cert/localhost/RootCA.key'),
+        cert: fs.readFileSync('./.cert/localhost/RootCA.crt'),
     }, app);
 }
 else{
