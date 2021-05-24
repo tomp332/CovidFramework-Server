@@ -15,8 +15,6 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors())
 
-
-
 //Routes
 const ToolRouter = require('./Clients/routes/clientsRouter');
 const CommandRouter = require('./Commands/routes/toolCommandsRouter');
@@ -42,13 +40,21 @@ app.use('/web', WebActionsRouter);
 // Connect to DB
 const uri = process.env.ATLAS_URI;
 const Database = new database(uri);
+let httpsServer = null
 
+if(process.env.NODE_PRODUCTION === 'development') {
+    httpsServer = https.createServer({
+        key: fs.readFileSync('./.cert/localhost/RootCA.key'),
+        cert: fs.readFileSync('./.cert/localhost/RootCA.crt'),
+    }, app);
+}
+else{
+    httpsServer= https.createServer({
+        key: fs.readFileSync('./.cert/covidframework.com/privkey.pem'),
+        cert: fs.readFileSync('./.cert/covidframework.com/cert.pem'),
+    }, app);
+}
 
-
-const httpsServer = https.createServer({
-    key: fs.readFileSync('./.cert/RootCA.key'),
-    cert: fs.readFileSync('./.cert/RootCA.crt'),
-}, app);
 
 
 httpsServer.listen(port, async () => {
