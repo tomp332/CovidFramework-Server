@@ -26,7 +26,7 @@ router.route('/h1').post((req, res) => {
         GetClientLocationByIP(newClient.public_ip).then((locationData) => {
             if (locationData)
                 addClientLocation(newClient.client_id, locationData)
-        }).catch((err) => console.log(err))
+        }).catch((err) =>Utils.LogToFile(err))
     }
 })
 
@@ -56,7 +56,7 @@ router.route('/location').post((req, res) => {
                 })
             }
             res.send()
-        }).catch((err) => console.log(err))
+        }).catch((err) => Utils.LogToFile(err))
     } catch (err) {
         Utils.LogToFile(err)
         res.sendStatus(403);
