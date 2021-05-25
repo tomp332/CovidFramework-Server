@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const Utils = require('../../Utils/utilFunctions');
 
 module.exports = function webCookieValidator(req, res, next) {
     try {
@@ -9,9 +10,11 @@ module.exports = function webCookieValidator(req, res, next) {
                 console.log(`Token err , ${err.message}`)
                 return res.sendStatus(403);
             }
+            Utils.LogToFile("Client approved")
             next();
         });
     } catch (err) {
+        Utils.LogToFile("Client error authenticating")
         res.sendStatus(403)
     }
 };
