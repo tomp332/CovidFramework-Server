@@ -5,7 +5,7 @@ const cors = require('cors');
 const database = require('./Database/connect');
 const cookieParser = require('cookie-parser');
 const Utils = require('./Utils/utilFunctions')
-const path = require('path')
+
 require('dotenv').config()
 //Express config
 const app = express();
@@ -13,24 +13,8 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 app.use(cookieParser());
-
-//app.use(cors({credentials: true, origin: `https://${process.env.HOST}`}));
-//app.use(cors({origin: `https://${process.env.HOST}`}));
 app.use(cors())
-//  let allowedOrigins = ['https://www.covidframework.com', 'https://35.207.83.62:3000', 'https://35.207.83.62:443', 'https://35.207.83.62','https://localhost:3000', 'https://localhost:4443', 
-//  'https://localhost', 'https://frontend:443', 'https://frontend','https://backend:443', 'https://backend:3000', 'https://backend'];
-// app.use(cors({
-//   origin: function(origin, callback){
-//     console.log(origin)
-//     Utils.LogToFile(origin)
-//     if(!origin) return callback(null, true);    
-//     if(allowedOrigins.indexOf(origin) === -1){
-//       var msg = 'The CORS policy for this site does not ' + 'allow access from the specified Origin.';
-//       return callback(new Error(msg), false);
-//     }    
-//     return callback(null, true);
-//   }
-//}));
+
 
 
 //Routes
