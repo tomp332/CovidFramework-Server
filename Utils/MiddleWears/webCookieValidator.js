@@ -10,7 +10,6 @@ module.exports = function webCookieValidator(req, res, next) {
                 console.log(`Token err , ${err.message}`)
                 return res.sendStatus(403);
             }
-            Utils.LogToFile(`Access token ${token} was approved`)
             next();
         });
     } catch (err) {

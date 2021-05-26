@@ -116,21 +116,33 @@ router.route('/locations').get((req, res) => {
 })
 
 //get client statistics
-router.route('/statistics').get((req, res) => {
-    ClientUtils.NumLowPrivClients().then((lowPrivs) => {
-        ClientUtils.NumHighPrivClients().then((highPrivs) => {
-            ClientUtils.NumConnectedClients().then((onlineClients) => {
-                ClientUtils.NumDisconnectedClients().then((offlineClients) => {
-                    res.send({
-                        lowPrivs: lowPrivs,
-                        highPrivs: highPrivs,
-                        onlineClients: onlineClients,
-                        offlineClients: offlineClients
-                    })
-                }).catch((err) => Utils.LogToFile(`Error getting offlineClients stats ${err}`))
-            }).catch((err) => Utils.LogToFile(`Error getting onlineClients stats ${err}`))
-        }).catch((err) => Utils.LogToFile(`Error getting highPrivs stats ${err}`))
-    }).catch((err) => Utils.LogToFile(`Error getting lowPrivs stats ${err}`))
+router.route('/statistics').get(async (req, res) => {
+    let lowPrivs = await ClientUtils.NumLowPrivClients().then((lowPrivs) => lowPrivs)
+        .catch((err) => {
+            Utils.LogToFile(`Error getting lowPrivs stats ${err}`)
+            return null
+        })
+    let highPrivs = await ClientUtils.NumHighPrivClients().then((highPrivs) =>highPrivs)
+        .catch((err) => {
+            Utils.LogToFile(`Error getting highPrivs stats ${err}`)
+            return null
+        })
+    let onlineClients  =  await ClientUtils.NumConnectedClients().then((onlineClients) =>onlineClients)
+        .catch((err) => {
+            Utils.LogToFile(`Error getting onlineClients stats ${err}`)
+            return null
+        })
+    let offlineClients = await ClientUtils.NumDisconnectedClients().then((offlineClients) =>offlineClients).catch((err) => {
+        Utils.LogToFile(`Error getting offlineClients stats ${err}`)
+        return null
+    })
+    // let allMonthsCount = await ClientUtils.
+    res.send({
+        lowPrivs: lowPrivs,
+        highPrivs: highPrivs,
+        onlineClients: onlineClients,
+        offlineClients: offlineClients,
+    })
 })
 
 module.exports = router;
