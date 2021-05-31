@@ -24,12 +24,12 @@ const CheckClientStatus = async (clientId) => {
             if (err)
                 Utils.LogToFile(`Error getting client status from db, ${err}`)
         })
-    return client.status
+    return client.isConnected
 }
 module.exports.CheckClientStatus = CheckClientStatus;
 
 const DisconnectClient = (clientId) => {
-    Client.findOneAndUpdate({client_id: clientId}, {status: false}, {useFindAndModify: false}, function (err) {
+    Client.findOneAndUpdate({client_id: clientId}, {isConnected: false}, {useFindAndModify: false}, function (err) {
         if (err)
             Utils.LogToFile(`Unable to disconnect inactive client ${clientId}`)
     })
@@ -119,7 +119,7 @@ const GetNumClients = async () => {
 module.exports.GetNumClients = GetNumClients;
 
 const NumConnectedClients = async () => {
-    return Client.countDocuments({status: true}, function (err) {
+    return Client.countDocuments({isConnected: true}, function (err) {
         if (err)
             Utils.LogToFile(`Error getting statistics for amount of online clients, ${err}`)
     });
@@ -127,7 +127,7 @@ const NumConnectedClients = async () => {
 module.exports.NumConnectedClients = NumConnectedClients;
 
 const NumDisconnectedClients = async () => {
-    return Client.countDocuments({status: false}, function (err) {
+    return Client.countDocuments({isConnected: false}, function (err) {
         if (err)
             Utils.LogToFile(`Error getting statistics for amount of offline clients, ${err}`)
     });
@@ -170,7 +170,7 @@ const createNewClient = (req) => {
         session_key: Utils.GenerateRandomSessionKey(),
         os: req.body.Os,
         isAdmin: req.body.isAdmin !== "False",
-        status: true,
+        isConnected: true,
         ipv4: req.body.IPv4,
         public_ip: req.body.PublicIP,
         wifiEnabled: req.body.ifWifi,

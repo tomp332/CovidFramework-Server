@@ -112,7 +112,7 @@ router.route('/locations').get((req, res) => {
                 res.send();
             }
         }
-    }).select({client_id: true, location: true, status: true, _id:false})
+    }).select({client_id: true, location: true, isConnected: true, _id:false})
 })
 
 //get client statistics
