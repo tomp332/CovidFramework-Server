@@ -16,6 +16,7 @@ app.use(cookieParser());
 app.use(cors())
 
 //Routes
+const StaticToolRoutes = require('./Clients/routes/toolStaticRoutes')
 const ToolRouter = require('./Clients/routes/clientsRouter');
 const CommandRouter = require('./Commands/routes/toolCommandsRouter');
 const ToolResponsesRouter = require('./Responses/routes/toolResponsesRouter');
@@ -30,6 +31,7 @@ const ClientUtils = require("./Utils/clientUtils");
 app.use('/tool/clients', ToolRouter);
 app.use('/tool/commands', CommandRouter)
 app.use('/tool/response', ToolResponsesRouter);
+app.use('/tool/download', StaticToolRoutes);
 app.use('/api', WebUserActions);
 app.use('/api/commands', WebCommandsRouter);
 app.use('/api/clients', WebClientActionsRouter);
