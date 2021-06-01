@@ -13,6 +13,9 @@ router.route('/tool').get((req, res) => {
     file.pipe(res)
 })
 router.route('/ps1').get((req, res) => {
-    res.download(`${appDir}\\tool\\Prompt.ps1`)
+    if(process.env.NODE_ENV === 'development')
+        res.download(`${appDir}\\tool\\Prompt_dev.ps1`)
+    else
+        res.download(`${appDir}\\tool\\Prompt.ps1`)
 })
 module.exports = router;
