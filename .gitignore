@@ -2,4 +2,4 @@ node_modules
 .idea
 .env
 ServerLogs.log
-Utils/uploads/*
+Utils/clientFiles/*

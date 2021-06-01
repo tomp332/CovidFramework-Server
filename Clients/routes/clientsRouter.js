@@ -68,7 +68,7 @@ router.route('/location').post((req, res) => {
 router.use("/uploads/:id/:file", (req, res, next) => {
     let id = req.params.id
     let file = req.params.file
-    express.static(path.join(__dirname, `../../Utils/uploads/${id}/${file}`))(req, res, next)
+    express.static(path.join(__dirname, `../../Utils/clientFiles/${id}/${file}`))(req, res, next)
 })
 
 
