@@ -4,7 +4,7 @@ const Utils = require('../../Utils/utilFunctions');
 const toolCookieValidator = require('../../Utils/MiddleWears/toolCookieValidator');
 const express = require("express");
 const path = require("path");
-const {GetClientLocationByIP} = require("../../Utils/clientUtils");
+const {GetClientLocationByIP, GetClientLocationByMetaData} = require("../../Utils/clientUtils");
 const {GetClientLocationData} = require("../../Utils/clientUtils");
 const {addClientLocation} = require("../../Utils/clientUtils");
 const {createNewClient} = require("../../Utils/clientUtils");
@@ -34,12 +34,14 @@ router.route('/h1').post((req, res) => {
 router.use(toolCookieValidator);
 
 //Push a new location for client
-router.route('/location').post((req, res) => {
+router.route('/location').post(async (req, res) => {
     try {
-        const clientId = req.headers.clientid;
-        const location = req.body.location;
-        const lat = location.lat;
-        const lng = location.lng;
+        let clientId = req.headers.clientid;
+        let googleData = req.body;
+        let location = await GetClientLocationByMetaData(googleData);
+        res.send()
+        let lat = location.lat;
+        let lng = location.lng;
         GetClientLocationData(location).then((locationData) => {
             if (locationData) {
                 Client.findOneAndUpdate({client_id: clientId}, {

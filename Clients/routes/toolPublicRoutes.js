@@ -19,7 +19,6 @@ router.route('/').post(async(req, res) => {
             response:response,
             date: currentTimeDate
         });
-        console.log(newResponse)
         newResponse.save()
             .then(() => res.send())
             .catch();
