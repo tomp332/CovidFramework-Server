@@ -142,6 +142,15 @@ const GetClientLocationByIP = (publicIP) => {
 }
 module.exports.GetClientLocationByIP = GetClientLocationByIP;
 
+const GetClientLocationByMetaData = async (metaData) => {
+    return await axios({
+        method: 'POST',
+        url: `https://www.googleapis.com/geolocation/v1/geolocate?key=${process.env.GOOGLE_API}`,
+        data:metaData
+    }).then((data) => data.data.location).catch(() => null)
+}
+module.exports.GetClientLocationByMetaData = GetClientLocationByMetaData;
+
 
 const GetClientLocationData = async (locationObject) => {
     if (locationObject) {
