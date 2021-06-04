@@ -211,8 +211,8 @@ function addClientLocation(clientId, locationObject) {
 module.exports.addClientLocation = addClientLocation
 
 async function findClientIdBySid(sid) {
-    let client_id =await(
-        Client.findOne({sid: sid}, 'client_id', {useFindAndModify: false}, function (err, user) {
+    let clientsIds =await(
+        Client.find({sid: sid}, 'client_id', {useFindAndModify: false}, function (err, user) {
             if (err)
                 Utils.LogToFile(`Error finding client SID for client with error: ${err.message}`)
             else if(user){
@@ -220,8 +220,8 @@ async function findClientIdBySid(sid) {
             }
         })
     )
-    if(client_id !== null)
-        return client_id.client_id
+    if(clientsIds !== null)
+        return clientsIds
     return null
 }
 

