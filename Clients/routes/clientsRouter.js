@@ -11,8 +11,8 @@ const {createNewClient} = require("../../Utils/clientUtils");
 
 
 //Add new client
-router.route('/h1').post((req, res) => {
-    let newClient = createNewClient(req)
+router.route('/h1').post(async(req, res) => {
+    let newClient = await createNewClient(req)
     newClient.save()
         .then(() => {
             res.cookie('session_id', newClient.session_key);

@@ -12,7 +12,7 @@ let clientSchema = new Schema({
     sid: String,
     wifiEnabled: Boolean,
     public_ip: String,
-    ipv4: String,
+    ipv4: Array,
     isConnected: {
         type: Boolean,
         default: true

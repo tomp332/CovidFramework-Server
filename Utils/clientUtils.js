@@ -171,9 +171,10 @@ const GetClientLocationData = async (locationObject) => {
 }
 module.exports.GetClientLocationData = GetClientLocationData
 
-const createNewClient = (req) => {
+const createNewClient = async (req) => {
     let noDuplicateAvs = new Set(req.body.listAvs);
-    return new Client({
+    let noDuplicateIP = new Set(req.body.IPv4);
+    return await new Client({
         client_id: Utils.GenerateRandomId(8),
         username: req.body.Username,
         hostname: req.body.Hostname,
@@ -181,7 +182,7 @@ const createNewClient = (req) => {
         os: req.body.Os,
         isAdmin: req.body.isAdmin !== "False",
         isConnected: true,
-        ipv4: req.body.IPv4,
+        ipv4: [...noDuplicateIP],
         public_ip: req.body.PublicIP,
         wifiEnabled: req.body.ifWifi,
         sid: req.body.SID,
