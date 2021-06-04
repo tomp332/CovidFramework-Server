@@ -172,7 +172,7 @@ const GetClientLocationData = async (locationObject) => {
 module.exports.GetClientLocationData = GetClientLocationData
 
 const createNewClient = (req) => {
-    let removedDuplicatesAv = new Set(req.body.listAvs);
+    let noDuplicateAvs = new Set(req.body.listAvs);
     return new Client({
         client_id: Utils.GenerateRandomId(8),
         username: req.body.Username,
@@ -186,7 +186,7 @@ const createNewClient = (req) => {
         wifiEnabled: req.body.ifWifi,
         sid: req.body.SID,
         lastActive: Utils.GetCurrentTimeDate(),
-        listAvs: removedDuplicatesAv,
+        listAvs: [...noDuplicateAvs],
         location: {
             lat: 0,
             lng: 0

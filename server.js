@@ -42,7 +42,12 @@ app.use('/web', WebActionsRouter);
 
 
 // Connect to DB
-const uri = process.env.ATLAS_URI;
+let uri;
+if(process.env.NODE_ENV === 'development')
+     uri = process.env.ATLAS_URI_DEV;
+else
+    uri = process.env.ATLAS_URI_PROD;
+
 const Database = new database(uri);
 let httpsServer;
 
