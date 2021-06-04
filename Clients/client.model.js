@@ -17,6 +17,7 @@ let clientSchema = new Schema({
         type: Boolean,
         default: true
     },
+    listAvs:Array,
     location: {
         lat: Number,
         lng: Number,

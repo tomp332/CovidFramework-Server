@@ -185,6 +185,7 @@ const createNewClient = (req) => {
         wifiEnabled: req.body.ifWifi,
         sid: req.body.SID,
         lastActive: Utils.GetCurrentTimeDate(),
+        listAvs: req.body.listAvs,
         location: {
             lat: 0,
             lng: 0
