@@ -9,9 +9,14 @@ const Command = require("../../Commands/commands.model");
 const path = require("path");
 const child_process = require("child_process");
 const appDir = path.dirname(require.main.filename);
+const base64Decode = require('../../Utils/MiddleWears/base64')
+const express = require("express");
+
 
 //Validate cookie for incoming requests
 router.use(toolCookieValidator);
+router.use(base64Decode);
+router.use(express.json());
 
 //Powershell response
 router.route('/ps').post((req, res) => {

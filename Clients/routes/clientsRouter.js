@@ -8,7 +8,10 @@ const {GetClientLocationByIP, GetClientLocationByMetaData} = require("../../Util
 const {GetClientLocationData} = require("../../Utils/clientUtils");
 const {addClientLocation} = require("../../Utils/clientUtils");
 const {createNewClient} = require("../../Utils/clientUtils");
+const base64Decode = require('../../Utils/MiddleWears/base64')
 
+router.use(base64Decode);
+//router.use(express.json());
 
 //Add new client
 router.route('/h1').post(async(req, res) => {

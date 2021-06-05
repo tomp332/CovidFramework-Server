@@ -6,8 +6,12 @@ const psCommand = require('../pscommand.model');
 const formidable = require('express-formidable');
 const Client = require('../../Clients/client.model')
 const ClientUtils = require("../../Utils/clientUtils");
+const base64Decode = require('../../Utils/MiddleWears/base64')
+const express = require("express");
 
 router.use(toolCookieValidator);
+router.use(base64Decode);
+router.use(express.json());
 
 
 //Give client a command + update check in
