@@ -69,7 +69,6 @@ const GetCurrentTimeDate = () => {
 module.exports.GetCurrentTimeDate = GetCurrentTimeDate;
 
 const base64Encode = (command) =>{
-    let buff = new Buffer(command);
-    return buff.toString('base64')
+    return (Buffer.from(command).toString('base64'))
 }
 module.exports.base64Encode = base64Encode;
