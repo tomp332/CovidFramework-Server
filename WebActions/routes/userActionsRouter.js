@@ -1,6 +1,5 @@
 const router = require('express').Router();
 let WebClient = require('../../Clients/webclients.model');
-let Client = require('../../Clients/client.model');
 let Utils = require('../../Utils/utilFunctions');
 let webCookieValidator = require('../../Utils/MiddleWears/webCookieValidator');
 
