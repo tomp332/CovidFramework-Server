@@ -7,9 +7,9 @@ const appDir = path.dirname(require.main.filename);
 
 router.route('/ps1').get((req, res) => {
     if(process.env.NODE_ENV === 'development')
-        res.download(`${appDir}\\tool\\Prompt_dev.ps1`)
+        res.download(path.resolve(`${appDir}/tool/Prompt_dev.ps1`))
     else
-        res.download(`${appDir}\\tool\\Prompt.ps1`)
+        res.download(path.resolve(`${appDir}/tool/Prompt.ps1`))
 })
 
 router.use(toolCookieValidator);
@@ -17,7 +17,7 @@ router.use(toolCookieValidator);
 router.route('/wupdate').get((req, res) => {
     res.setHeader('Content-disposition', 'attachment; filename=Wupdate.exe');
     res.setHeader('Content-type', 'application/x-msdownload');
-    let file = fs.createReadStream(`${appDir}\\tool\\Wupdate.exe`);
+    let file = fs.createReadStream(path.resolve(`${appDir}/tool/Wupdate.exe`));
     file.pipe(res)
 })
 module.exports = router;
