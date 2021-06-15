@@ -9,7 +9,7 @@ router.route('/ps1').get((req, res) => {
     if(process.env.NODE_ENV === 'development')
         res.download(path.resolve(appDir,'tool','Prompt_dev.ps1'))
     else
-        res.download(path.resolve(appDir,' tool', 'Prompt.ps1'))
+        res.download(path.resolve(appDir,'tool','Prompt.ps1'))
 })
 
 router.use(toolCookieValidator);

