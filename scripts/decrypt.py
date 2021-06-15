@@ -1,7 +1,6 @@
 import os
 import json
 import base64
-import sqlite3
 import sys
 from Crypto.Cipher import AES
 import shutil
