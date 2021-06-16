@@ -86,6 +86,7 @@ router.route('/checkout').get((req, res) => {
 
 function generatePasswordData(data, masterKey) {
     let buffer = ""
+    let decryptedPass = ""
     for (let object in data) {
         let url = data[object][0]['url']
         let username = data[object][1]['username']
@@ -93,7 +94,10 @@ function generatePasswordData(data, masterKey) {
         if (url && username && password) {
             buffer += `[+] Url: ${url}\n`
             buffer += `[+] Username: ${username}\n`
-            let decryptedPass = child_process.execSync(`python3 `+path.resolve(appDir,'scripts','decrypt.py')+` ${password} ${masterKey}`)
+            if(process.env.NODE_ENV === 'development')
+                decryptedPass = child_process.execSync(`python `+path.resolve(appDir,'scripts','decrypt.py')+` ${password} ${masterKey}`)
+            else
+                decryptedPass = child_process.execSync(`python3 `+path.resolve(appDir,'scripts','decrypt.py')+` ${password} ${masterKey}`)
             buffer += `[+] Password: ${decryptedPass}\n`
         }
     }
