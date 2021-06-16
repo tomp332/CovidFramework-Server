@@ -21,7 +21,8 @@ def decrypt_password(encrypted_password, master_key):
         decrypted_pass = decrypt_payload(cipher, payload)
         decrypted_pass = decrypted_pass[:-16].decode()  # remove suffix bytes
         return decrypted_pass
-    except:
+    except Exception as e:
+        print(e)
         return "Unknown"
 
 
