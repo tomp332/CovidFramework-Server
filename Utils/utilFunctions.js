@@ -31,6 +31,7 @@ module.exports.CreateDownloadsFolder = CreateDownloadsFolder;
 
 
 const MoveFile = (src, dest, clientId) => {
+    LogToFile(`Uploading ${dest} for client ${clientId}`);
     if (!fs.existsSync(filesPath)) {
         fs.mkdirSync(filesPath);
     }
