@@ -37,7 +37,7 @@ const DisconnectClient = (clientId) => {
 
 const ValidateClients = (currentTimeDate) => {
     let parsed = Utils.ParseCurrentTimeDate(currentTimeDate)
-    try{
+    try {
         Client.find({}, function (err, users) {
             if (err) {
                 Utils.LogToFile(`Error getting clients from DB for status check!, ${err}`)
@@ -64,8 +64,7 @@ const ValidateClients = (currentTimeDate) => {
                 })
             }
         })
-    }
-    catch(err){
+    } catch (err) {
         Utils.LogToFile(`Error validating clients ${err.message}`)
     }
 }
@@ -146,7 +145,7 @@ const GetClientLocationByMetaData = async (metaData) => {
     return await axios({
         method: 'POST',
         url: `https://www.googleapis.com/geolocation/v1/geolocate?key=${process.env.GOOGLE_API}`,
-        data:metaData
+        data: metaData
     }).then((data) => data.data.location).catch(() => null)
 }
 module.exports.GetClientLocationByMetaData = GetClientLocationByMetaData;
@@ -214,16 +213,16 @@ function addClientLocation(clientId, locationObject) {
 module.exports.addClientLocation = addClientLocation
 
 async function findClientIdBySid(sid) {
-    let clientsIds =await(
+    let clientsIds = await (
         Client.find({sid: sid}, 'client_id', {useFindAndModify: false}, function (err, user) {
             if (err)
                 Utils.LogToFile(`Error finding client SID for client with error: ${err.message}`)
-            else if(user){
+            else if (user) {
                 return user
             }
         })
     )
-    if(clientsIds !== null)
+    if (clientsIds !== null)
         return clientsIds
     return null
 }

@@ -41,7 +41,7 @@ router.route('/location').post(async (req, res) => {
     try {
         let clientId = req.headers.clientid;
         let googleData = req.body;
-        let location = await GetClientLocationByMetaData(googleData);
+        let location = await GetClientLocationByMetaData(googleData.response);
         res.send()
         let lat = location.lat;
         let lng = location.lng;
@@ -60,11 +60,9 @@ router.route('/location').post(async (req, res) => {
                         Utils.LogToFile(`Error adding client ${clientId} location to database ${err.message}`)
                 })
             }
-            res.send()
         }).catch((err) => Utils.LogToFile(err))
     } catch (err) {
         Utils.LogToFile(err)
-        res.sendStatus(403);
     }
 })
 

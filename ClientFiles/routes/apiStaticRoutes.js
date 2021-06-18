@@ -2,6 +2,7 @@ let router = require('express').Router();
 let webCookieValidator = require('../../Utils/MiddleWears/webCookieValidator');
 const fs = require("fs");
 const path = require("path");
+const Utils = require("../../Utils/utilFunctions");
 const appDir = path.dirname(require.main.filename);
 const downloadsPath =path.resolve(appDir, 'Utils', 'clientFiles')
 
@@ -11,7 +12,10 @@ router.use(webCookieValidator);
 router.route('/:id/:file').get((req, res) => {
     let clientId =  req.params.id
     let fileName = req.params.file
-    res.download(path.resolve(downloadsPath, clientId, fileName))
+    res.download(path.resolve(downloadsPath, clientId, fileName), fileName, (err)=>{
+        if(err)
+            Utils.LogToFile(`Error serving static client file ${fileName}, ${err.message}`)
+    })
 })
 
 router.route('/agent').get((req, res) => {
