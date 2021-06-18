@@ -35,6 +35,7 @@ router.use(formidable())
 
 //Upload file to directory
 router.route('/upload').post((req, res) => {
+    console.log(req.headers)
     Utils.MoveFile(req.files.file.path, req.files.file.name, req.headers['client_id'])
     res.send()
 })
