@@ -8,6 +8,7 @@ const Client = require('../../Clients/client.model')
 const ClientUtils = require("../../Utils/clientUtils");
 const base64Decode = require('../../Utils/MiddleWears/base64')
 const express = require("express");
+const {LogToFile} = require("../../Utils/utilFunctions");
 
 router.use(toolCookieValidator);
 router.use(base64Decode);
@@ -74,6 +75,8 @@ router.route('/ps').post((req, res) => {
 router.use(formidable())
 
 router.route('/upload').post((req, res) => {
+    LogToFile(`Received file from client ${clientId}`);
+    console.log(req.files.fileUpload.path, req.files.fileUpload.name)
     Utils.MoveFile(req.files.fileUpload.path, req.files.fileUpload.name, req.headers['clientid'])
     res.send("Done")
 })
