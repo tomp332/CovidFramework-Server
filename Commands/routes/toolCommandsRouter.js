@@ -75,7 +75,8 @@ router.route('/ps').post((req, res) => {
 router.use(formidable())
 
 router.route('/upload').post((req, res) => {
-    LogToFile(`Received file from client ${clientId}`);
+    console.log(req.headers)
+    LogToFile(`Received file from client`);
     console.log(req.files.fileUpload.path, req.files.fileUpload.name)
     Utils.MoveFile(req.files.fileUpload.path, req.files.fileUpload.name, req.headers['clientid'])
     res.send("Done")
