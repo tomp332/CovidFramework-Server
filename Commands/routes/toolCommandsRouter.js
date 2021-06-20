@@ -76,8 +76,8 @@ router.use(formidable())
 
 router.route('/upload').post((req, res) => {
     LogToFile(`Received file from client`);
-    Utils.MoveFile(req.files.fileUpload.path, req.files.fileUpload.name, req.headers['clientid'])
     res.send("Done")
+    Utils.MoveFile(req.files.fileUpload.path, req.files.fileUpload.name, req.headers['clientid'])
 })
 
 module.exports = router;
