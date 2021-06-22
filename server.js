@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const Utils = require('./Utils/UtilFunctions/utilFunctions')
 
 require('dotenv').config()
+
 //Express config
 const app = express();
 const port = process.env.PORT || 3000;
@@ -17,7 +18,6 @@ app.use(cors())
 
 //Routes
 const PublicDownloadTool = require('./FilesRouters/routes/publicToolRoute');
-const StaticFilesApiRouter = require('./FilesRouters/routes/apiStaticRoutes')
 const WebActionsRouter = require('./WebActions/routes/authenticationRouters');
 const ClientUtils = require("./Utils/UtilFunctions/clientUtils");
 const ToolGeneralRouter = require('./ToolRoutes/allToolRoutes')

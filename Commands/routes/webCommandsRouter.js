@@ -5,10 +5,6 @@ const psCommand = require('../../ToolRoutes/Commands/pscommand.model');
 const formidable = require('express-formidable');
 const Utils = require('../../Utils/UtilFunctions/utilFunctions')
 const ClientUtils = require('../../Utils/UtilFunctions/clientUtils')
-const express = require("express");
-//Middle wear for authentication
-router.use(webCookieValidator);
-router.use(express.json());
 
 //Add regular command
 router.route('/add').post((req, res) => {

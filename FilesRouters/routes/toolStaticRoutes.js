@@ -5,13 +5,6 @@ const fs = require("fs");
 const express = require("express");
 const appDir = path.dirname(require.main.filename);
 
-router.route('/ps1').get((req, res) => {
-    if(process.env.NODE_ENV === 'development')
-        res.download(path.resolve(appDir,'ToolScripts','Prompt_dev.ps1'))
-    else
-        res.download(path.resolve(appDir,'ToolScripts','Prompt.ps1'))
-})
-
 router.use(toolCookieValidator);
 
 //Serve uploaded files
