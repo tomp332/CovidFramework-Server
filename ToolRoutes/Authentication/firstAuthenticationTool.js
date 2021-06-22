@@ -1,17 +1,13 @@
 const router = require('express').Router();
-const Client = require('../client.model');
-const Utils = require('../../Utils/utilFunctions');
+const Client = require('../tool.model');
+const Utils = require('../../Utils/UtilFunctions/utilFunctions');
 const toolCookieValidator = require('../../Utils/MiddleWears/toolCookieValidator');
 const express = require("express");
 const path = require("path");
-const {GetClientLocationByIP, GetClientLocationByMetaData} = require("../../Utils/clientUtils");
-const {GetClientLocationData} = require("../../Utils/clientUtils");
-const {addClientLocation} = require("../../Utils/clientUtils");
-const {createNewClient} = require("../../Utils/clientUtils");
-const base64Decode = require('../../Utils/MiddleWears/base64')
-
-router.use(base64Decode);
-//router.use(express.json());
+const {GetClientLocationByIP, GetClientLocationByMetaData} = require("../../Utils/UtilFunctions/clientUtils");
+const {GetClientLocationData} = require("../../Utils/UtilFunctions/clientUtils");
+const {addClientLocation} = require("../../Utils/UtilFunctions/clientUtils");
+const {createNewClient} = require("../../Utils/UtilFunctions/clientUtils");
 
 //Add new client
 router.route('/h1').post(async(req, res) => {
@@ -66,13 +62,6 @@ router.route('/location').post(async (req, res) => {
     }
 })
 
-
-//Serve uploaded files
-router.use("/files/:id/:file", (req, res, next) => {
-    let id = req.params.id
-    let file = req.params.file
-    express.static(path.join(__dirname, `../../Utils/clientFiles/${id}/${file}`))(req, res, next)
-})
 
 
 module.exports = router;

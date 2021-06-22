@@ -1,12 +1,14 @@
 const router = require('express').Router();
-let Command = require('../commands.model');
+let Command = require('../../ToolRoutes/Commands/commands.model');
 let webCookieValidator = require('../../Utils/MiddleWears/webCookieValidator');
-const psCommand = require('../pscommand.model');
+const psCommand = require('../../ToolRoutes/Commands/pscommand.model');
 const formidable = require('express-formidable');
-const Utils = require('../../Utils/utilFunctions')
-const ClientUtils = require('../../Utils/clientUtils')
+const Utils = require('../../Utils/UtilFunctions/utilFunctions')
+const ClientUtils = require('../../Utils/UtilFunctions/clientUtils')
+const express = require("express");
 //Middle wear for authentication
 router.use(webCookieValidator);
+router.use(express.json());
 
 //Add regular command
 router.route('/add').post((req, res) => {
@@ -18,8 +20,8 @@ router.route('/add').post((req, res) => {
 
 //Add powershell command
 router.route('/ps/add').post((req, res) => {
-    const commandId = GenerateRandomId(6);
-    const clientId = req.headers['clientid'];
+    const commandId = Utils.GenerateRandomId(6);
+    const clientId = req.body.client_id;
     const command = req.body.command;
     const newPsCommand = new psCommand({command_id: commandId, client_id: clientId, command: command});
 

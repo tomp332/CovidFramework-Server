@@ -1,12 +1,9 @@
 let router = require('express').Router();
-let webCookieValidator = require('../../Utils/MiddleWears/webCookieValidator');
 const fs = require("fs");
 const path = require("path");
-const Utils = require("../../Utils/utilFunctions");
+const Utils = require("../../Utils/UtilFunctions/utilFunctions");
 const appDir = path.dirname(require.main.filename);
-const downloadsPath =path.resolve(appDir, 'Utils', 'clientFiles')
-
-router.use(webCookieValidator);
+const downloadsPath = path.resolve(appDir, 'Utils', 'clientFiles')
 
 //Server all retrieved client files
 router.route('/:id/:file').get((req, res) => {

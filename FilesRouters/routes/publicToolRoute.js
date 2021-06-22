@@ -1,7 +1,7 @@
 let router = require('express').Router();
 const fs = require("fs");
 const path = require("path");
-const Utils = require("../../Utils/utilFunctions");
+const Utils = require("../../Utils/UtilFunctions/utilFunctions");
 const appDir = path.dirname(require.main.filename);
 
 

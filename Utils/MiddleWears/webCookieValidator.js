@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const Utils = require('../../Utils/utilFunctions');
+const Utils = require('../UtilFunctions/utilFunctions');
 
 module.exports = function webCookieValidator(req, res, next) {
     try {

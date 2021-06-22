@@ -1,12 +1,8 @@
 const router = require('express').Router();
-const Client = require('../client.model');
-const webCookieValidator = require('../../Utils/MiddleWears/webCookieValidator');
-const Utils = require('../../Utils/utilFunctions');
-const Command = require("../../Commands/commands.model");
-const ClientUtils = require('../../Utils/clientUtils')
-
-//validate cookies
-router.use(webCookieValidator);
+const Client = require('../../ToolRoutes/tool.model');
+const Utils = require('../../Utils/UtilFunctions/utilFunctions');
+const Command = require("../../ToolRoutes/Commands/commands.model");
+const ClientUtils = require('../../Utils/UtilFunctions/clientUtils')
 
 //Kill all clients
 router.route('/killall').get((req, res) => {
@@ -139,8 +135,8 @@ router.route('/statistics').get(async (req, res) => {
     // let allMonthsCount = await ClientUtils.
     res.send({
         lowPrivs: lowPrivs,
-        highPrivs: highPrivs,
         onlineClients: onlineClients,
+        highPrivs: highPrivs,
         offlineClients: offlineClients,
     })
 })

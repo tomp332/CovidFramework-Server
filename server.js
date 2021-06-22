@@ -4,45 +4,33 @@ const express = require('express');
 const cors = require('cors');
 const database = require('./Database/connect');
 const cookieParser = require('cookie-parser');
-const Utils = require('./Utils/utilFunctions')
+const Utils = require('./Utils/UtilFunctions/utilFunctions')
 
 require('dotenv').config()
 //Express config
 const app = express();
 const port = process.env.PORT || 3000;
 
-app.use(express.json());
+
 app.use(cookieParser());
 app.use(cors())
 
 //Routes
-const PublicDownloadTool = require('./ClientFiles/routes/publicToolRoute');
-const ToolPublicRoutes = require('./ClientFiles/routes/toolPublicRoutes');
-const StaticToolRoutes = require('./ClientFiles/routes/toolStaticRoutes');
-const ToolRouter = require('./Clients/routes/clientsRouter');
-const StaticFilesApiRouter = require('./ClientFiles/routes/apiStaticRoutes')
-const CommandRouter = require('./Commands/routes/toolCommandsRouter');
-const ToolResponsesRouter = require('./Responses/routes/toolResponsesRouter');
-const ApiResponsesRouter = require('./Responses/routes/apiResponseRouter');
-const WebActionsRouter = require('./WebActions/routes/webRouter');
-const WebCommandsRouter = require('./Commands/routes/webCommandsRouter');
-const WebClientActionsRouter = require('./Clients/routes/webClientsRouter');
-const WebUserActions = require('./WebActions/routes/userActionsRouter');
-const ClientUtils = require("./Utils/clientUtils");
+const PublicDownloadTool = require('./FilesRouters/routes/publicToolRoute');
+const StaticFilesApiRouter = require('./FilesRouters/routes/apiStaticRoutes')
+const WebActionsRouter = require('./WebActions/routes/authenticationRouters');
+const ClientUtils = require("./Utils/UtilFunctions/clientUtils");
+const ToolGeneralRouter = require('./ToolRoutes/allToolRoutes')
+const ApiGeneralRouter = require('./Clients/routes/allApiRoutes');
+
 
 app.use('/55a1/2ww5r551',PublicDownloadTool)
-app.use('/tool/clients', ToolRouter);
-app.use('/tool/commands', CommandRouter)
-app.use('/tool/response', ToolResponsesRouter);
-app.use('/tool/download', StaticToolRoutes);
-app.use('/tool/creds', ToolPublicRoutes);
-app.use('/api', WebUserActions);
-app.use('/api/commands', WebCommandsRouter);
-app.use('/api/clients', WebClientActionsRouter);
-app.use('/api/response', ApiResponsesRouter);
-app.use('/clients/files',StaticFilesApiRouter );
+
 app.use('/web', WebActionsRouter);
 
+app.use('/api', ApiGeneralRouter);
+
+app.use('/tool',ToolGeneralRouter)
 
 // Connect to DB
 let uri;

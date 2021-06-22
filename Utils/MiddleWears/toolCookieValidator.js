@@ -1,5 +1,5 @@
-const Client = require('../../Clients/client.model');
-const Utils = require("../utilFunctions");
+const Client = require('../../ToolRoutes/tool.model');
+const Utils = require("../UtilFunctions/utilFunctions");
 
 module.exports = function toolCookieValidator(req, res, next) {
     const sessionKey = req.cookies['session_id'];

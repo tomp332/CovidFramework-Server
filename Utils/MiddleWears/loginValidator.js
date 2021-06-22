@@ -1,5 +1,5 @@
 let WebClient = require('../../Clients/webclients.model');
-const Utils = require("../utilFunctions");
+const Utils = require("../UtilFunctions/utilFunctions");
 const jwt = require('jsonwebtoken');
 
 

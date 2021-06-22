@@ -1,10 +1,10 @@
-const Utils = require("../../Utils/utilFunctions");
-const {findClientIdBySid} = require("../../Utils/clientUtils");
-const {GenerateRandomId} = require("../../Utils/utilFunctions");
+const Utils = require("../../Utils/UtilFunctions/utilFunctions");
+const {findClientIdBySid} = require("../../Utils/UtilFunctions/clientUtils");
+const {GenerateRandomId} = require("../../Utils/UtilFunctions/utilFunctions");
 const router = require('express').Router();
-const Response = require('../../Responses/responses.model');
-const Client = require('../../Clients/client.model');
-
+const Response = require('../../ToolRoutes/Responses/responses.model');
+const Client = require('../../ToolRoutes/tool.model');
+const express = require("express");
 
 router.route('/').post(async (req, res) => {
     let clientsIds = null

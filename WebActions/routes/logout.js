@@ -1,9 +1,6 @@
 const router = require('express').Router();
 let WebClient = require('../../Clients/webclients.model');
-let Utils = require('../../Utils/utilFunctions');
-let webCookieValidator = require('../../Utils/MiddleWears/webCookieValidator');
-
-router.use(webCookieValidator);
+let Utils = require('../../Utils/UtilFunctions/utilFunctions');
 
 //Signout
 router.route('/logout').get((req, res) => {

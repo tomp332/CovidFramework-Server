@@ -1,7 +1,7 @@
 const Utils = require('./utilFunctions')
-const Command = require('../Commands/commands.model')
-const Client = require('../Clients/client.model')
-const Response = require('../Responses/responses.model')
+const Command = require('../../ToolRoutes/Commands/commands.model')
+const Client = require('../../ToolRoutes/tool.model')
+const Response = require('../../ToolRoutes/Responses/responses.model')
 const axios = require('axios')
 
 const AddCommand = (clientId, command) => {

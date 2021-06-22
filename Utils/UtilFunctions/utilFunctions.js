@@ -3,6 +3,11 @@ const log = require('log-to-file');
 const fs = require('fs');
 const filesPath = "./Utils/clientFiles/"
 const Utils = require("./utilFunctions");
+const WebClient = require("../../Clients/webclients.model");
+const jwt = require("jsonwebtoken");
+const path = require("path");
+const appDir = path.dirname(require.main.filename);
+
 
 const GenerateRandomId = (numOfChars) => {
     return Math.random().toString(36).substr(2, numOfChars);
@@ -17,7 +22,7 @@ exports.GenerateRandomSessionKey = GenerateRandomSessionKey;
 
 
 const LogToFile = (logContent) => {
-    log(logContent, './ServerLogs.log');
+    log(logContent, path.resolve(appDir,'Utils','Logs','ServerLogs.log'));
 }
 module.exports.LogToFile = LogToFile;
 
@@ -57,7 +62,6 @@ const ParseCurrentTimeDate = (currentDateTime) => {
 module.exports.ParseCurrentTimeDate = ParseCurrentTimeDate;
 
 
-
 const GetCurrentTimeDate = () => {
     return new Date().toLocaleDateString(undefined, {
         day: '2-digit',
@@ -69,7 +73,31 @@ const GetCurrentTimeDate = () => {
 }
 module.exports.GetCurrentTimeDate = GetCurrentTimeDate;
 
-const base64Encode = (command) =>{
+const base64Encode = (command) => {
     return (Buffer.from(command).toString('base64'))
 }
 module.exports.base64Encode = base64Encode;
+
+
+async function loginValidate(username, password) {
+    await WebClient.findOne({username: username, password: password}, function (err, user) {
+        if (err) {
+            return {};
+        } else {
+            if (user !== null) {
+                let payload = {user: username}
+                let token = jwt.sign(payload, process.env.SECRET, {expiresIn: '24h'})
+                WebClient.findOneAndUpdate({username: username, password: password},
+                    {session_key: token}, {useFindAndModify: false}, function (err) {
+                        if (err)
+                            return {};
+                    })
+                return {auth: true, token: token}
+            } else {
+                return {}
+            }
+        }
+    })
+}
+
+module.exports.loginValidate = loginValidate;
