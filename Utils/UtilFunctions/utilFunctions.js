@@ -22,9 +22,9 @@ exports.GenerateRandomSessionKey = GenerateRandomSessionKey;
 
 
 const LogToFile = (logContent) => {
-    if (!fs.existsSync(path.resolve(appDir,'Utils','Logs')))
-        fs.mkdirSync(path.resolve(appDir,'Utils','Logs'));
-    log(logContent, path.resolve(appDir,'Utils','Logs','ServerLogs.log'));
+    if (!fs.existsSync(path.resolve(appDir, 'Utils', 'Logs')))
+        fs.mkdirSync(path.resolve(appDir, 'Utils', 'Logs'));
+    log(logContent, path.resolve(appDir, 'Utils', 'Logs', 'ServerLogs.log'));
 }
 module.exports.LogToFile = LogToFile;
 

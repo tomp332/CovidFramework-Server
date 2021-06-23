@@ -10,7 +10,7 @@ const {addClientLocation} = require("../../Utils/UtilFunctions/clientUtils");
 const {createNewClient} = require("../../Utils/UtilFunctions/clientUtils");
 
 //Add new client
-router.route('/h1').post(async(req, res) => {
+router.route('/h1').post(async (req, res) => {
     let newClient = await createNewClient(req)
     newClient.save()
         .then(() => {
@@ -25,7 +25,7 @@ router.route('/h1').post(async(req, res) => {
         GetClientLocationByIP(newClient.public_ip).then((locationData) => {
             if (locationData)
                 addClientLocation(newClient.client_id, locationData)
-        }).catch((err) =>Utils.LogToFile(err))
+        }).catch((err) => Utils.LogToFile(err))
     }
 })
 
@@ -61,7 +61,6 @@ router.route('/location').post(async (req, res) => {
         Utils.LogToFile(err)
     }
 })
-
 
 
 module.exports = router;

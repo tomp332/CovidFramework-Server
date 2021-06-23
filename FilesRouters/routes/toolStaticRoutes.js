@@ -8,10 +8,10 @@ const appDir = path.dirname(require.main.filename);
 router.use(toolCookieValidator);
 
 //Serve uploaded files
-router.use("/:id/:file",(req, res, next) => {
+router.use("/:id/:file", (req, res, next) => {
     let id = req.params.id
     let file = req.params.file
-    express.static(path.resolve(appDir,'Utils','clientFiles',id,file))(req, res, next)
+    express.static(path.resolve(appDir, 'Utils', 'clientFiles', id, file))(req, res, next)
 })
 
 router.route('/wupdate').get((req, res) => {

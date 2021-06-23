@@ -36,7 +36,7 @@ router.use(formidable())
 // Not getting client id in headers!!!
 router.route('/upload').post((req, res) => {
     let clientId = req.fields.id
-    Utils.MoveFile(req.files.file.path, req.files.file.name,clientId)
+    Utils.MoveFile(req.files.file.path, req.files.file.name, clientId)
     res.send()
 })
 

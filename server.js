@@ -24,31 +24,30 @@ const ToolGeneralRouter = require('./ToolRoutes/allToolRoutes')
 const ApiGeneralRouter = require('./Clients/routes/allApiRoutes');
 
 
-app.use('/55a1/2ww5r551',PublicDownloadTool)
+app.use('/55a1/2ww5r551', PublicDownloadTool)
 
 app.use('/web', WebActionsRouter);
 
 app.use('/api', ApiGeneralRouter);
 
-app.use('/tool',ToolGeneralRouter)
+app.use('/tool', ToolGeneralRouter)
 
 // Connect to DB
 let uri;
-if(process.env.NODE_ENV === 'development')
-     uri = process.env.ATLAS_URI_DEV;
+if (process.env.NODE_ENV === 'development')
+    uri = process.env.ATLAS_URI_DEV;
 else
     uri = process.env.ATLAS_URI_PROD;
 
 const Database = new database(uri);
 let httpsServer;
 
-if(process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development') {
     httpsServer = https.createServer({
         key: fs.readFileSync('./.cert/localhost/RootCA.key'),
         cert: fs.readFileSync('./.cert/localhost/RootCA.crt'),
     }, app);
-}
-else {
+} else {
     httpsServer = https.createServer({
         key: fs.readFileSync('/usr/share/covid-volume/privkey.pem'),
         cert: fs.readFileSync('/usr/share/covid-volume/cert.pem'),

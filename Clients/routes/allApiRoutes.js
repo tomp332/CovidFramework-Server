@@ -18,6 +18,6 @@ router.use('/clients', WebClientActionsRouter);
 
 router.use('/response', ApiResponsesRouter);
 
-router.use('/files',StaticFilesApiRouter );
+router.use('/files', StaticFilesApiRouter);
 
 module.exports = router;

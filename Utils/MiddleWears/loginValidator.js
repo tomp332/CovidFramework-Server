@@ -14,7 +14,7 @@ module.exports = function loginValidate(req, res, next) {
                     res.status(403).send("Unauthorized!");
                 } else {
                     if (user !== null) {
-                        let payload = {user:username}
+                        let payload = {user: username}
                         let token = jwt.sign(payload, process.env.SECRET, {expiresIn: '24h'})
                         WebClient.findOneAndUpdate({username: username, password: password},
                             {session_key: token}, {useFindAndModify: false}, function (err) {
@@ -22,7 +22,7 @@ module.exports = function loginValidate(req, res, next) {
                                     Utils.LogToFile(`Error updating client cookie to DB ${err}`);
                                     res.status(500).send("Server error");
                                 }
-                        })
+                            })
                         res.send({auth: true, token: token})
                         next();
                     } else {

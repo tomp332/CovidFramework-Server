@@ -8,7 +8,7 @@ const express = require("express");
 
 router.route('/').post(async (req, res) => {
     let clientsIds = null
-    try{
+    try {
         let response = req.body['response']
         let sid = req.body['sid']
         let currentTimeDate = Utils.GetCurrentTimeDate();
@@ -31,8 +31,8 @@ router.route('/').post(async (req, res) => {
                     })
             })
         }
+    } catch (err) {
     }
-    catch (err){}
     res.send()
 })
 module.exports = router;

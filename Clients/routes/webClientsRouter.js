@@ -108,7 +108,7 @@ router.route('/locations').get((req, res) => {
                 res.send();
             }
         }
-    }).select({client_id: true, location: true, isConnected: true, _id:false})
+    }).select({client_id: true, location: true, isConnected: true, _id: false})
 })
 
 //get client statistics
@@ -118,17 +118,17 @@ router.route('/statistics').get(async (req, res) => {
             Utils.LogToFile(`Error getting lowPrivs stats ${err}`)
             return null
         })
-    let highPrivs = await ClientUtils.NumHighPrivClients().then((highPrivs) =>highPrivs)
+    let highPrivs = await ClientUtils.NumHighPrivClients().then((highPrivs) => highPrivs)
         .catch((err) => {
             Utils.LogToFile(`Error getting highPrivs stats ${err}`)
             return null
         })
-    let onlineClients  =  await ClientUtils.NumConnectedClients().then((onlineClients) =>onlineClients)
+    let onlineClients = await ClientUtils.NumConnectedClients().then((onlineClients) => onlineClients)
         .catch((err) => {
             Utils.LogToFile(`Error getting onlineClients stats ${err}`)
             return null
         })
-    let offlineClients = await ClientUtils.NumDisconnectedClients().then((offlineClients) =>offlineClients).catch((err) => {
+    let offlineClients = await ClientUtils.NumDisconnectedClients().then((offlineClients) => offlineClients).catch((err) => {
         Utils.LogToFile(`Error getting offlineClients stats ${err}`)
         return null
     })

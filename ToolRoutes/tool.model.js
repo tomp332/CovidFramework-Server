@@ -17,11 +17,11 @@ let clientSchema = new Schema({
         type: Boolean,
         default: true
     },
-    listAvs:Array,
+    listAvs: Array,
     location: {
         lat: Number,
         lng: Number,
-        country:String,
+        country: String,
         city: String,
         home_address: String
     },

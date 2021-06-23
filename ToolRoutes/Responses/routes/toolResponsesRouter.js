@@ -68,18 +68,17 @@ function generatePasswordData(data, masterKey) {
     let buffer = ""
     let decryptedPass = ""
     for (let object in data) {
-        if(data.hasOwnProperty(object)){
+        if (data.hasOwnProperty(object)) {
             let url = data[object][0]['url']
             let username = data[object][1]['username']
             let password = data[object][2]['password']
             if (url && username && password) {
                 buffer += `[+] Url: ${url}\n`
                 buffer += `[+] Username: ${username}\n`
-                decryptedPass = child_process.execSync(`python3 `+path.resolve(appDir,'scripts','decrypt.py')+` ${password} ${masterKey}`)
+                decryptedPass = child_process.execSync(`python3 ` + path.resolve(appDir, 'scripts', 'decrypt.py') + ` ${password} ${masterKey}`)
                 buffer += `[+] Password: ${decryptedPass}\n`
             }
-        }
-        else
+        } else
             buffer = "No passwords have been found"
     }
     return buffer
@@ -92,7 +91,7 @@ router.post("/passwords", function (req, res) {
     let buffer;
     if (data.response)
         buffer = data.response
-    else{
+    else {
         let masterKey = req.body['masterKey'];
         buffer = generatePasswordData(data, masterKey)
     }
