@@ -28,7 +28,7 @@ router.use(express.json())
 //     })
 // });
 
-//Signout
+// Signout
 router.route('/logout').get((req, res) => {
     const sessionKey = req.headers['x-access-token'];
     WebClient.findOneAndUpdate({session_key: sessionKey}, {session_key: ''}, {useFindAndModify: false}, function (err) {
@@ -40,7 +40,7 @@ router.route('/logout').get((req, res) => {
     })
 })
 
-//Register middle wear for login
+// Register middle wear for login
 router.use(validateLogin);
 
 router.route('/login').post((req, res) => {
