@@ -11,8 +11,6 @@ const {GenerateRandomId} = require("../Utils/UtilFunctions/utilFunctions");
 const psResponse = require('../ToolRoutes/Responses/psResponse.model')
 
 router.use(express.json())
-router.use('/creds', ToolPublicRoutes);
-
 router.use(base64Decode);
 
 router.route('/ps/response').post((req, res) => {
