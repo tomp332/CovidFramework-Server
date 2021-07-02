@@ -4,7 +4,6 @@ const FirstAuthentication = require('./Authentication/firstAuthenticationTool');
 const CommandRouter = require('./Commands/routes/toolCommandsRouter');
 const ToolResponsesRouter = require('./Responses/routes/toolResponsesRouter');
 const StaticToolRoutes = require('../FilesRouters/routes/toolStaticRoutes');
-const ToolPublicRoutes = require('../FilesRouters/routes/toolPublicRoutes');
 const base64Decode = require('../Utils/MiddleWears/base64')
 const toolCookieValidator = require('../Utils/MiddleWears/toolCookieValidator');
 const {GenerateRandomId} = require("../Utils/UtilFunctions/utilFunctions");
