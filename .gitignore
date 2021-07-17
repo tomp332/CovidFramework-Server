@@ -1,6 +1,6 @@
 node_modules
 .idea
 .env
-Utils/Logs/ServerLogs.log
-Utils/clientFiles/*
+Api/Utils/Logs/ServerLogs.log
+Api/Utils/clientFiles/*
 package-lock.json
