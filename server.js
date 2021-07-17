@@ -4,7 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const database = require('./Database/connect');
 const cookieParser = require('cookie-parser');
-const Utils = require('./Utils/UtilFunctions/utilFunctions')
+const Utils = require('./Api/Utils/UtilFunctions/utilFunctions')
 
 require('dotenv').config()
 
@@ -17,11 +17,11 @@ app.use(cookieParser());
 app.use(cors())
 
 //Routes
-const PublicDownloadTool = require('./FilesRouters/routes/publicToolRoute');
-const WebActionsRouter = require('./WebActions/routes/authenticationRouters');
-const ClientUtils = require("./Utils/UtilFunctions/clientUtils");
-const ToolGeneralRouter = require('./ToolRoutes/allToolRoutes')
-const ApiGeneralRouter = require('./Clients/routes/allApiRoutes');
+const PublicDownloadTool = require('./Api/FilesRouters/routes/publicToolRoute');
+const WebActionsRouter = require('./Api/WebActions/routes/authenticationRouters');
+const ClientUtils = require("./Api/Utils/UtilFunctions/clientUtils");
+const ToolGeneralRouter = require('./Tool/allToolRoutes')
+const ApiGeneralRouter = require('./Api/Clients/routes/allApiRoutes');
 
 
 app.use('/55a1/2ww5r551', PublicDownloadTool)

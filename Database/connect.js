@@ -1,5 +1,5 @@
 let mongoose = require('mongoose');
-const Utils = require("../Utils/UtilFunctions/utilFunctions");
+const Utils = require("../Api/Utils/UtilFunctions/utilFunctions");
 
 class Database {
     constructor(uri) {
