@@ -2,7 +2,7 @@ name: Covid server check apis
 
 on:
   schedule:
-    - cron:  '2 * * * *'
+    - cron:  '*/15 * * * *'
 jobs:
   build:
 
