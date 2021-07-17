@@ -1,6 +1,4 @@
 const axios = require("axios");
-const {GetClientLocationData} = require("../Api/Utils/UtilFunctions/clientUtils");
-const {GetClientLocationByMetaData} = require("../Api/Utils/UtilFunctions/clientUtils");
 const {GetClientLocationByIP} = require("../Api/Utils/UtilFunctions/clientUtils");
 let expect = require("chai").expect;
 const googleApi = 'AIzaSyCdThihts7X0VeVH_GKHGbGp1Nv2LjsFFE'
