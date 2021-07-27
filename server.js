@@ -49,8 +49,8 @@ if (process.env.NODE_ENV === 'development') {
     }, app);
 } else {
     httpsServer = https.createServer({
-        key: fs.readFileSync('/covidframework-server/.cert/covidframeowrk.com/privkey.pem'),
-        cert: fs.readFileSync('/covidframework-server/.cert/covidframeowrk.com/cert.pem'),
+        key: fs.readFileSync('/.cert/covidframeowrk.com/privkey.pem'),
+        cert: fs.readFileSync('/.cert/covidframeowrk.com/cert.pem'),
     }, app);
 }
 
