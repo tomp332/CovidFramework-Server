@@ -7,7 +7,7 @@ const StaticToolRoutes = require('../Api/FilesRouters/routes/toolStaticRoutes');
 const base64Decode = require('../Api/Utils/MiddleWears/base64')
 const toolCookieValidator = require('../Api/Utils/MiddleWears/toolCookieValidator');
 const {GenerateRandomId} = require("../Api/Utils/UtilFunctions/utilFunctions");
-const psResponse = require('../Tool/Responses/psResponse.model')
+const psResponse = require('./Responses/psResponse.model')
 
 router.use(express.json())
 router.use(base64Decode);

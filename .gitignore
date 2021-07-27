@@ -1,5 +1,5 @@
 node_modules
 .idea
 .env
-Api/Utils/Logs/ServerLogs.log
-Api/Utils/clientFiles/*
+Server/Api/Utils/Logs/ServerLogs.log
+Server/Api/Utils/clientFiles/*

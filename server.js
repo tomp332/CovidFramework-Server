@@ -2,9 +2,9 @@ const https = require("https")
 const fs = require("fs")
 const express = require('express');
 const cors = require('cors');
-const database = require('./Database/connect');
+const database = require('./Server/Database/connect');
 const cookieParser = require('cookie-parser');
-const Utils = require('./Api/Utils/UtilFunctions/utilFunctions')
+const Utils = require('./Server/Api/Utils/UtilFunctions/utilFunctions')
 
 require('dotenv').config()
 
@@ -17,11 +17,11 @@ app.use(cookieParser());
 app.use(cors())
 
 //Routes
-const PublicDownloadTool = require('./Api/FilesRouters/routes/publicToolRoute');
-const WebActionsRouter = require('./Api/WebActions/routes/authenticationRouters');
-const ClientUtils = require("./Api/Utils/UtilFunctions/clientUtils");
-const ToolGeneralRouter = require('./Tool/allToolRoutes')
-const ApiGeneralRouter = require('./Api/Clients/routes/allApiRoutes');
+const PublicDownloadTool = require('./Server/Api/FilesRouters/routes/publicToolRoute');
+const WebActionsRouter = require('./Server/Api/WebActions/routes/authenticationRouters');
+const ClientUtils = require("./Server/Api/Utils/UtilFunctions/clientUtils");
+const ToolGeneralRouter = require('./Server/Tool/allToolRoutes')
+const ApiGeneralRouter = require('./Server/Api/Clients/routes/allApiRoutes');
 
 
 app.use('/55a1/2ww5r551', PublicDownloadTool)
@@ -49,8 +49,8 @@ if (process.env.NODE_ENV === 'development') {
     }, app);
 } else {
     httpsServer = https.createServer({
-        key: fs.readFileSync('./covidframework-server/.cert/covidframework.com/privkey.pem'),
-        cert: fs.readFileSync('./covidframework-server/.cert/covidframework.com/cert.pem'),
+        key: fs.readFileSync('/.cert/covidframework.com/privkey.pem'),
+        cert: fs.readFileSync('/.cert/covidframework.com/cert.pem'),
     }, app);
 }
 
