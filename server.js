@@ -5,7 +5,7 @@ const cors = require('cors');
 const database = require('./Server/Database/connect');
 const cookieParser = require('cookie-parser');
 const Utils = require('./Server/Api/Utils/UtilFunctions/utilFunctions')
-
+const forceSSL = require('express-force-ssl');
 require('dotenv').config()
 
 //Express config
@@ -15,7 +15,6 @@ const port = process.env.PORT || 3000;
 
 app.use(cookieParser());
 app.use(cors())
-
 //Routes
 const PublicDownloadTool = require('./Server/Api/FilesRouters/routes/publicToolRoute');
 const WebActionsRouter = require('./Server/Api/WebActions/routes/authenticationRouters');
@@ -49,9 +48,10 @@ if (process.env.NODE_ENV === 'development') {
     }, app);
 } else {
     httpsServer = https.createServer({
-        key: fs.readFileSync('/.cert/covidframework.com/privkey.pem'),
-        cert: fs.readFileSync('/.cert/covidframework.com/cert.pem'),
+        key: fs.readFileSync('./.cert/covidframework.com/privkey.pem'),
+        cert: fs.readFileSync('./.cert/covidframework.com/cert.pem'),
     }, app);
+    app.use(forceSSL);
 }
 
 httpsServer.listen(port, async () => {
