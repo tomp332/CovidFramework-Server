@@ -48,6 +48,11 @@ if (process.env.NODE_ENV === 'development') {
         cert: fs.readFileSync('./.cert/localhost/RootCA.crt'),
     }, app);
 } else {
+    fs.readdir('./', (err, files) => {
+        files.forEach(file => {
+            console.log(file);
+        });
+    });
     httpsServer = https.createServer({
         key: fs.readFileSync('/covidframework-server/.cert/covidframework.com/privkey.pem'),
         cert: fs.readFileSync('/covidframework-server/.cert/covidframework.com/cert.pem'),
