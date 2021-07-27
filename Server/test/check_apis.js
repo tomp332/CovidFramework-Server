@@ -1,7 +1,7 @@
 const axios = require("axios");
 const {GetClientLocationByIP} = require("../Api/Utils/UtilFunctions/clientUtils");
 let expect = require("chai").expect;
-require('dotenv').config({path:__dirname+'/./../.env_tests'})
+require('dotenv').config({path: __dirname + '/./../.env_tests'})
 const googleApi = process.env.GOOGLE_API
 
 describe("Check ipv4 location api", function () {
@@ -48,16 +48,16 @@ describe("Get client location based on geolocation", function () {
 
 describe("Get client location data", function () {
     it("gets a specific location on an lat lng object", async function () {
-        let locationObject = { lat: 32.0800007, lng: 34.775195 }
+        let locationObject = {lat: 32.0800007, lng: 34.775195}
         let locationMetaData = await axios(
             {
                 url: `https://maps.googleapis.com/maps/api/geocode/json?latlng=${locationObject.lat},${locationObject.lng}&key=${googleApi}`,
             }).then((data) => {
-                let fullAddress = data.data.results[0].formatted_address.toString()
-                data = {
-                    country: fullAddress.split(',')[2],
-                    city: fullAddress.split(',')[1],
-                    home_address: fullAddress.split(',')[0]
+            let fullAddress = data.data.results[0].formatted_address.toString()
+            data = {
+                country: fullAddress.split(',')[2],
+                city: fullAddress.split(',')[1],
+                home_address: fullAddress.split(',')[0]
             }
             return data
         }).catch((err) => {

