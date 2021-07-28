@@ -4,3 +4,4 @@ node_modules
 Server/Api/Utils/Logs/ServerLogs.log
 Server/Api/Utils/clientFiles/*
 Api/Utils/clientFiles/*
+Api/Utils/Logs/ServerLogs.log
