@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node server.js",
-    "start": "nodemon server.js",
-    "start_linux": "node server.js",
+    "dev": "node ./Server/server.js",
+    "start": "nodemon ./Server/server.js",
+    "start_linux": "node ./Server/server.js",
     "test": "mocha --reporter spec"
   },
   "keywords": [],

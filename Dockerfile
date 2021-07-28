@@ -6,6 +6,6 @@ COPY package.json .
 RUN npm install -g npm@latest
 RUN npm config set strict-ssl false
 RUN npm install --silent ignore-warnings
-COPY ./Server/* .
+COPY ./Server/ ./Server
 EXPOSE 3000
 ENTRYPOINT ["npm","start"]
