@@ -1,7 +1,8 @@
 const axios = require("axios");
 const {GetClientLocationByIP} = require("../Server/Api/Utils/UtilFunctions/clientUtils");
+const path = require("path");
 let expect = require("chai").expect;
-require('dotenv').config({path: __dirname + '/./../.env_tests'})
+require('dotenv').config({path: path.resolve(__dirname,'.env_tests')})
 const googleApi = process.env.GOOGLE_API
 
 describe("Check ipv4 location api", function () {
