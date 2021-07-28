@@ -2,11 +2,11 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "dev": "node Server/server.js",
-    "start": "nodemon Server/server.js",
-    "start_linux": "node Server/server.js",
+    "dev": "node server.js",
+    "start": "nodemon server.js",
+    "start_linux": "node server.js",
     "test": "mocha --reporter spec"
   },
   "keywords": [],
