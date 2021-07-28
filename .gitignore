@@ -3,3 +3,4 @@ node_modules
 .env
 Server/Api/Utils/Logs/ServerLogs.log
 Server/Api/Utils/clientFiles/*
+Api/Utils/clientFiles/*
