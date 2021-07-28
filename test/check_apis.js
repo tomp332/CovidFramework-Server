@@ -49,7 +49,7 @@ describe("Get client location based on geolocation", function () {
 
 describe("Get client location data", function () {
     it("gets a specific location on an lat lng object", async function () {
-        let locationObject = {lat: 32.0800007, lng: 34.775195}
+        let locationObject = {lat:30.81215760556089, lng:33.70026217922023}
         let locationMetaData = await axios(
             {
                 url: `https://maps.googleapis.com/maps/api/geocode/json?latlng=${locationObject.lat},${locationObject.lng}&key=${googleApi}`,
