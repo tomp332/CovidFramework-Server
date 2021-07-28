@@ -4,6 +4,7 @@ RUN pip3 install pycryptodomex
 WORKDIR /covidframework-server
 COPY package.json .
 COPY server.js .
+COPY .env .
 RUN npm install -g npm@latest
 RUN npm config set strict-ssl false
 RUN npm install --silent ignore-warnings

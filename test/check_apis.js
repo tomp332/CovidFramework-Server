@@ -1,5 +1,5 @@
 const axios = require("axios");
-const {GetClientLocationByIP} = require("../Api/Utils/UtilFunctions/clientUtils");
+const {GetClientLocationByIP} = require("../Server/Api/Utils/UtilFunctions/clientUtils");
 let expect = require("chai").expect;
 require('dotenv').config({path: __dirname + '/./../.env_tests'})
 const googleApi = process.env.GOOGLE_API
