@@ -1,7 +1,7 @@
 name: Covid-Framework-Server-Local-build
 on:
   push:
-    branches: [ local_env ]
+    branches: [ local-env ]
 
 jobs:
   Server-Build:
