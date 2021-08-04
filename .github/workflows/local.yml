@@ -1,9 +1,9 @@
-name: Build local env for Server
-
+name: Local image build
 on:
   push:
-    branches:
-      - 'feature/*'
+    branches: [ feature/local-env ]
+  pull_request:
+    branches: [ feature/local-env ]
 jobs:
   Local-Server-Build:
     runs-on: ubuntu-latest
