@@ -4,10 +4,10 @@ RUN pip3 install pycryptodomex
 WORKDIR /covidframework-server-local
 
 # Copy necessary files
-COPY package.json .
-COPY server.js .
-COPY .env .
-COPY ./Server/ ./Server
+COPY ../package.json .
+COPY ../server.js .
+COPY ../env .
+COPY ../Server/ ./Server
 
 #Install packages
 RUN npm install -g npm@latest
