@@ -9,7 +9,6 @@ COPY ../server.js .
 COPY ../.env .
 COPY ../Server/ ./Server
 
-
 #Install packages
 RUN npm install -g npm@latest
 RUN npm config set strict-ssl false
