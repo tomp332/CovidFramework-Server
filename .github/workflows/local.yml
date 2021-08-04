@@ -23,8 +23,7 @@ jobs:
       - name: Checkout to current branch
         uses: actions/checkout@v2
         with:
-          repository: ''
-          ref: ''
+          ref: 'feature/local-env'
           
       - name: Log into Github container
         uses: docker/login-action@v1
