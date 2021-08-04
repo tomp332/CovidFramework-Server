@@ -32,12 +32,7 @@ app.use('/api', ApiGeneralRouter);
 app.use('/tool', ToolGeneralRouter)
 
 // Connect to DB
-let uri;
-if (process.env.NODE_ENV === 'development')
-    uri = process.env.ATLAS_URI_DEV;
-else
-    uri = process.env.ATLAS_URI_PROD;
-
+let uri = process.env.ATLAS_URI_MONGO;
 const Database = new database(uri);
 let httpsServer;
 
