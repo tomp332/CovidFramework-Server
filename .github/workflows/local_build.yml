@@ -2,9 +2,7 @@ name: Covid-Framework-Server-Local-build
 on:
   push:
     branches: [ local_env ]
-  release:
-    types:
-      - published
+
 jobs:
   Server-Build:
     runs-on: ubuntu-latest
