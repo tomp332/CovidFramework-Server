@@ -6,7 +6,7 @@ WORKDIR /covidframework-server-local
 # Copy necessary files
 COPY ../package.json .
 COPY ../server.js .
-COPY ..//.env .
+COPY ../.env .
 COPY ../Server/ ./Server
 
 #Install packages
