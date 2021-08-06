@@ -5,15 +5,15 @@ WORKDIR /covidframework-server-local
 
 # Copy necessary files
 COPY ../package.json .
-COPY ../server.js .
-COPY ../.cert/localhost ./.cert/localhost
-COPY ../.env .
-COPY ../Server/ ./Server
-
 #Install packages
 RUN npm install -g npm@latest
 RUN npm config set strict-ssl false
 RUN npm install --silent ignore-warnings
+
+COPY ../server.js .
+COPY ../.cert ./.cert
+COPY ../. .
+COPY ../Server ./Server
 
 # Main
 EXPOSE 3000
