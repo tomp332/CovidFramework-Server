@@ -1,0 +1,4 @@
+node_modules
+.idea
+Server/Api/Utils/Logs/ServerLogs.log
+Server/Api/Utils/clientFiles/*

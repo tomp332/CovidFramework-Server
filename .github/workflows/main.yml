@@ -1,0 +1,55 @@
+name: Covid-Framework-Server-build
+on:
+  push:
+    branches: [ main ]
+  release:
+    types:
+      - published
+jobs:
+  Server-Build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Log into Github container
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{github.actor}}
+          password: ${{secrets.GITHUB_TOKEN}}
+
+      - uses: actions/checkout@v2
+
+
+      - uses: technote-space/get-diff-action@v5
+        with:
+          PATTERNS: |
+            *local_env*/*
+
+      - name: Build local image
+        if: env.GIT_DIFF
+        id: docker_local_build
+        uses: docker/build-push-action@v2
+        with:
+          file: ./local_env/Dockerfile
+          push: true
+          tags: ghcr.io/${{github.actor}}/covid-framework/server-local:latest
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Build production image
+        if: env.GIT_DIFF == ''
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ghcr.io/${{github.actor}}/covid-framework/server:latest
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
